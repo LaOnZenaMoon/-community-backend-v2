@@ -1,0 +1,131 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: community-gateway-app
+  main:
+    web-application-type: reactive
+  cloud:
+    gateway:
+      default-filters:
+        - name: GlobalFilter
+          args:
+            baseMessage: Spring Cloud Gateway GlobalFilter
+            preLogger: true
+            postLogger: true
+      routes:
+        # auth-service-app > login
+        - id: auth-service
+          uri: lb://auth-service-app
+          predicates:
+            - Path=/auth-service/login
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/auth-service/(?<segment>.*), /$\{segment}
+        # auth-service-app > sign up
+        - id: auth-service
+          uri: lb://auth-service-app
+          predicates:
+            - Path=/auth-service/users
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/auth-service/(?<segment>.*), /$\{segment}
+        # auth-service-app > actuator
+        - id: auth-service
+          uri: lb://auth-service-app
+          predicates:
+            - Path=/auth-service/actuator/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/auth-service/(?<segment>.*), /$\{segment}
+        # auth-service-app > others
+        - id: auth-service
+          uri: lb://auth-service-app
+          predicates:
+            - Path=/auth-service/**
+          filters:
+            - RewritePath=/auth-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+        # product-service-app > get products
+        - id: product-service
+          uri: lb://product-service-app
+          predicates:
+            - Path=/product-service/products/**
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/product-service/(?<segment>.*), /$\{segment}
+        # product-service-app > actuator
+        - id: product-service
+          uri: lb://product-service-app
+          predicates:
+            - Path=/product-service/actuator/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/product-service/(?<segment>.*), /$\{segment}
+        # product-service-app > others
+        - id: product-service
+          uri: lb://product-service-app
+          predicates:
+            - Path=/product-service/**
+          filters:
+            - RewritePath=/product-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+        # order-service-app > actuator
+        - id: order-service
+          uri: lb://order-service-app
+          predicates:
+            - Path=/order-service/actuator/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/order-service/(?<segment>.*), /$\{segment}
+        # order-service-app > others
+        - id: order-service
+          uri: lb://order-service-app
+          predicates:
+            - Path=/order-service/**
+          filters:
+            - RewritePath=/order-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+        # payment-service-app > actuator
+        - id: payment-service
+          uri: lb://payment-service-app
+          predicates:
+            - Path=/payment-service/actuator/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/payment-service/(?<segment>.*), /$\{segment}
+        # payment-service-app > others
+        - id: payment-service
+          uri: lb://payment-service-app
+          predicates:
+            - Path=/payment-service/**
+          filters:
+            - RewritePath=/payment-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+logbook:
+  obfuscate:
+    headers:
+      - Content-Type
+      - Content-Length
+  write:
+    max-body-size: 10000
+  exclude:
+    - /actuator/health
