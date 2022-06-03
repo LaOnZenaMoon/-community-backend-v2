@@ -1,0 +1,8 @@
+rootProject.name = 'community-backend-v2'
+
+include('application:community-discovery-app')
+
+include('core:core-utils')
+include('core:core-web')
+
+include('domain:domain-rds')
