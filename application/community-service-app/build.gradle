@@ -1,0 +1,31 @@
+plugins {
+    id 'org.asciidoctor.convert' version '2.1.0'
+    id 'org.kordamp.gradle.livereload' version '0.4.0'
+}
+
+dependencies {
+    implementation project(":core:core-utils")
+    implementation project(":core:core-web")
+
+    implementation project(":domain:domain-rds")
+
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+}
+
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
+asciidoctor {
+    logger.quiet "#######  asciidoctor #######"
+    sourceDir 'src/main/asciidoc'
+    attributes 'snippets': snippetsDir
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+liveReload {
+    docRoot asciidoctor.outputDir.canonicalPath
+    dependsOn asciidoctor
+}
