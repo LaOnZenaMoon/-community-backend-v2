@@ -1,0 +1,56 @@
+server:
+  port: 8082
+  shutdown: graceful
+
+spring:
+  application:
+    name: community-auth-app
+  profiles:
+    active: local
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 500
+    open-in-view: false
+  datasource:
+    hikari:
+      pool-name: Hikari
+      maximum-pool-size: 10
+      connection-timeout: 30000
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: false
+  sql:
+    init:
+      mode: always
+
+logbook:
+  obfuscate:
+    headers:
+      - Content-Type
+      - Content-Length
+  write:
+    max-body-size: 10000
+  exclude:
+    - /actuator/health
+
+security:
+  oauth2:
+    jwt:
+      sign-key: 123@#$
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+logging:
+  level:
+    root: DEBUG
+    org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter: ERROR
