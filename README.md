@@ -32,6 +32,9 @@
 ## Skills
 * Java 11
 * Spring Boot 2.5.x
+* Spring Security
+  * Spring Security OAuth2
+  * Spring Security JWT
 * Spring Boot Actuator
 * Spring Cloud
   * Spring Cloud Netflix Eureka
