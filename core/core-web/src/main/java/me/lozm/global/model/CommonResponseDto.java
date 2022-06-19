@@ -51,8 +51,8 @@ public class CommonResponseDto<T> {
 
     public static ResponseEntity<Object> badRequest(String message) {
         CommonResponseDto<Object> response = CommonResponseDto.builder()
-                .code(CustomExceptionType.INVALID_PARAM.getCode())
-                .message(isEmpty(message) ? CustomExceptionType.INVALID_PARAM.getMessage() : message)
+                .code(CustomExceptionType.INVALID_REQUEST_PARAMETERS.getCode())
+                .message(isEmpty(message) ? CustomExceptionType.INVALID_REQUEST_PARAMETERS.getMessage() : message)
                 .build();
         return getObjectResponseEntity(response);
     }

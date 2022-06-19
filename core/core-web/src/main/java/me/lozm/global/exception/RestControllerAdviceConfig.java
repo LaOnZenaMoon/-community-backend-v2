@@ -26,13 +26,13 @@ public class RestControllerAdviceConfig {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected HttpEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.info(">> handleMethodArgumentNotValidException, message: {}", e.getMessage());
-        return CommonResponseDto.badRequest(CustomExceptionType.INVALID_PARAM, e.getBindingResult());
+        return CommonResponseDto.badRequest(CustomExceptionType.INVALID_REQUEST_PARAMETERS, e.getBindingResult());
     }
 
     @ExceptionHandler(BindException.class)
     protected HttpEntity<Object> handleBindException(BindException e) {
         log.info(">> handleBindException, message: {}", e.getMessage());
-        return CommonResponseDto.badRequest(CustomExceptionType.INVALID_PARAM, e.getBindingResult());
+        return CommonResponseDto.badRequest(CustomExceptionType.INVALID_REQUEST_PARAMETERS, e.getBindingResult());
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
@@ -84,8 +84,8 @@ public class RestControllerAdviceConfig {
         e.printStackTrace();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(CommonResponseDto.builder()
-                        .code(CustomExceptionType.SERVICE_ERROR.getCode())
-                        .message(CustomExceptionType.SERVICE_ERROR.getMessage())
+                        .code(CustomExceptionType.INTERNAL_SERVER_ERROR.getCode())
+                        .message(CustomExceptionType.INTERNAL_SERVER_ERROR.getMessage())
                         .build());
     }
 
