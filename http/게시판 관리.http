@@ -1,0 +1,8 @@
+### 상담 상태 조회
+GET {{service-app}}/boards
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status == 200, "Response status is wrong");
+});
+%}

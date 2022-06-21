@@ -53,3 +53,4 @@ management:
 logging:
   level:
     root: INFO
+    me.lozm.app.user.client.AuthClient: DEBUG

@@ -1,0 +1,10 @@
+### access token 발급
+POST {{auth-app}}/oauth/token?grant_type=password&username=system&password=asdfasdf1234&scope=read&force=true
+Authorization: Basic bGFvbnplbmFtb29uX2NsaWVudF9pZDpsYW9uemVuYW1vb25fY2xpZW50X3NlY3JldA==
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status == 200, "Response status is wrong");
+});
+%}
+
