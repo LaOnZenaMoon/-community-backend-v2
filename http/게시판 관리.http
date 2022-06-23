@@ -1,4 +1,33 @@
-### 상담 상태 조회
+### 사용자 access token 발급
+POST {{auth-app}}/oauth/token?grant_type=password&username=system&password=asdfasdf1234&scope=read&force=true
+Authorization: Basic bGFvbnplbmFtb29uX2NsaWVudF9pZDpsYW9uemVuYW1vb25fY2xpZW50X3NlY3JldA==
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status == 200, "Response status is wrong");
+});
+client.global.set("ACCESS_TOKEN", response.body.access_token);
+%}
+
+### 게시글 생성
+POST {{service-app}}/boards
+Authorization: Bearer {{ACCESS_TOKEN}}
+Content-Type: application/json
+
+{
+  "boardType": "ALL",
+  "contentType": "GENERAL",
+  "title": "첫번째 게시글",
+  "content": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status == 200, "Response status is wrong");
+});
+%}
+
+### 게시글 목록(페이징) 조회
 GET {{service-app}}/boards
 
 > {%

@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.lozm.domain.board.vo.BoardCreateVo;
 import me.lozm.global.code.BoardType;
 import me.lozm.global.code.ContentType;
 import me.lozm.global.code.converter.BoardTypeConverter;
@@ -55,5 +56,17 @@ public class Board extends BaseEntity {
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<Comment> comments;
+
+
+    public static Board from(BoardCreateVo.Request boardCreateVo) {
+        Board board = new Board();
+        board.isUse = true;
+        board.boardType = boardCreateVo.getBoardType();
+        board.contentType = boardCreateVo.getContentType();
+        board.viewCount = 0L;
+        board.title = boardCreateVo.getTitle();
+        board.content = boardCreateVo.getContent();
+        return board;
+    }
 
 }
