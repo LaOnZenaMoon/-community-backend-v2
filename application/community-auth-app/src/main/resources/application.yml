@@ -42,7 +42,7 @@ logbook:
 security:
   oauth2:
     jwt:
-      sign-key: 123@#$
+      sign-key: $2a$10$12t6S2tal0kpUFFCWFs6MOFA3LB0.KrtvCayJcLXtNe4aqZueKMD2
 
 management:
   endpoints:
