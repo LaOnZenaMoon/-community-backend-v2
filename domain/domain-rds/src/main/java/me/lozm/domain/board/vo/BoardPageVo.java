@@ -21,7 +21,7 @@ public class BoardPageVo {
 
     @Getter
     public static class Element {
-        private final Long id;
+        private final Long boardId;
         private final HierarchicalEntity hierarchicalBoard;
         private final BoardType boardType;
         private final ContentType contentType;
@@ -30,8 +30,8 @@ public class BoardPageVo {
         private final String content;
 
         @QueryProjection
-        public Element(Long id, HierarchicalEntity hierarchicalBoard, BoardType boardType, ContentType contentType, Long viewCount, String title, String content) {
-            this.id = id;
+        public Element(Long boardId, HierarchicalEntity hierarchicalBoard, BoardType boardType, ContentType contentType, Long viewCount, String title, String content) {
+            this.boardId = boardId;
             this.hierarchicalBoard = hierarchicalBoard;
             this.boardType = boardType;
             this.contentType = contentType;

@@ -1,5 +1,6 @@
 package me.lozm.global.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mysema.commons.lang.Assert;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
@@ -7,6 +8,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 @Getter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CommonPageResponseDto<T> {
     private final int pageNumber;      
     private final int pageSize;

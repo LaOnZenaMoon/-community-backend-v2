@@ -19,5 +19,6 @@ public interface BoardMapper {
 
     BoardCreateVo.Request toCreateVo(BoardCreateDto.Request requestDto);
 
+    @Mapping(source = "id", target = "boardId")
     BoardCreateVo.Response toCreateVo(Board board);
 }
