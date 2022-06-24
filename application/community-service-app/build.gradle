@@ -11,6 +11,8 @@ dependencies {
 
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+
+    testImplementation files(project(':core:core-web').sourceSets.test.output.classesDirs)
 }
 
 ext {

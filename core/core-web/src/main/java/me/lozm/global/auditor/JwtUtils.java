@@ -15,7 +15,6 @@ public class JwtUtils {
                     .setSigningKey(signingKey.getBytes())
                     .parse(jwt.replace("Bearer", ""));
         } catch (RuntimeException e) {
-            e.printStackTrace();
             throw new IllegalArgumentException(
                     format("getJwtObject Exception => JWT: %s, signingKey: %s", jwt, signingKey));
         }
