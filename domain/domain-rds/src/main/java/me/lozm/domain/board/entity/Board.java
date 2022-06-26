@@ -11,6 +11,9 @@ import me.lozm.global.code.converter.BoardTypeConverter;
 import me.lozm.global.code.converter.ContentTypeConverter;
 import me.lozm.global.model.entity.BaseEntity;
 import me.lozm.global.model.entity.HierarchicalEntity;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.List;
@@ -21,6 +24,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "BOARD")
+@Where(clause = "IS_USE = true")
+@DynamicUpdate
+@DynamicInsert
 @SequenceGenerator(name = "BOARD_SEQ_GEN", sequenceName = "BOARD_SEQ")
 public class Board extends BaseEntity {
 

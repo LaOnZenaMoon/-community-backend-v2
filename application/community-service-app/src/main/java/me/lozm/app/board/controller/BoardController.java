@@ -3,12 +3,14 @@ package me.lozm.app.board.controller;
 import lombok.RequiredArgsConstructor;
 import me.lozm.app.board.service.BoardService;
 import me.lozm.domain.board.dto.BoardCreateDto;
+import me.lozm.domain.board.dto.BoardDetailDto;
 import me.lozm.domain.board.dto.BoardPageDto;
 import me.lozm.domain.board.mapper.BoardMapper;
 import me.lozm.domain.board.vo.BoardCreateVo;
+import me.lozm.domain.board.vo.BoardDetailVo;
 import me.lozm.domain.board.vo.BoardPageVo;
-import me.lozm.global.model.dto.CommonPageResponseDto;
 import me.lozm.global.model.CommonResponseDto;
+import me.lozm.global.model.dto.CommonPageResponseDto;
 import me.lozm.global.model.dto.PageQueryParameters;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
@@ -33,6 +35,13 @@ public class BoardController {
 
         List<BoardPageDto.Response> responseDtoList = responsePageVo.getContent().stream().map(boardMapper::toPageDto).collect(Collectors.toList());
         return CommonResponseDto.success(new CommonPageResponseDto<>(responsePageVo, responseDtoList));
+    }
+
+    @GetMapping("{boardId}")
+    public CommonResponseDto<BoardDetailDto.Response> getBoardDetail(@PathVariable("boardId") Long boardId) {
+        BoardDetailVo.Response boardDetailVo = boardService.getBoardDetail(boardId);
+        BoardDetailDto.Response responseDto = boardMapper.toDetailDto(boardDetailVo);
+        return CommonResponseDto.success(responseDto);
     }
 
     @PostMapping
