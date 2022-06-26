@@ -30,7 +30,7 @@ class BoardControllerTest extends BaseDocumentationTest {
 
     @DisplayName("게시글 목록 조회(페이징) 성공")
     @Test
-    void getBoards_ok() throws Exception {
+    void getBoards_success() throws Exception {
         // Given
         final Faker faker = new Faker();
 
@@ -75,7 +75,7 @@ class BoardControllerTest extends BaseDocumentationTest {
 
     @DisplayName("게시글 생성 성공")
     @Test
-    void createBoard_ok() throws Exception {
+    void createBoard_success() throws Exception {
         // Given
         final String requestBody = "{\n" +
                 "  \"boardType\": \"ALL\",\n" +
