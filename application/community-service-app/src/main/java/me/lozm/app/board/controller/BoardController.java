@@ -45,10 +45,11 @@ public class BoardController {
     }
 
     @PostMapping
-    public CommonResponseDto createBoard(@RequestBody @Validated BoardCreateDto.Request requestDto) {
+    public CommonResponseDto<BoardDetailDto.Response> createBoard(@RequestBody @Validated BoardCreateDto.Request requestDto) {
         BoardCreateVo.Request boardCreateVo = boardMapper.toCreateVo(requestDto);
-        boardService.createBoard(boardCreateVo);
-        return CommonResponseDto.success();
+        BoardDetailVo.Response boardDetailVo = boardService.createBoard(boardCreateVo);
+        BoardDetailDto.Response responseDto = boardMapper.toDetailDto(boardDetailVo);
+        return CommonResponseDto.success(responseDto);
     }
 
 }

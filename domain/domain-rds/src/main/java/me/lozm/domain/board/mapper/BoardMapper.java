@@ -22,8 +22,6 @@ public interface BoardMapper {
     BoardCreateVo.Request toCreateVo(BoardCreateDto.Request requestDto);
 
     @Mapping(source = "id", target = "boardId")
-    BoardCreateVo.Response toCreateVo(Board board);
-
     BoardDetailVo.Response toDetailVo(Board board);
 
     BoardDetailDto.Response toDetailDto(BoardDetailVo.Response boardDetailVo);

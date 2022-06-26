@@ -9,7 +9,7 @@ public interface BoardService {
 
     Page<BoardPageVo.Element> getBoards(BoardPageVo.Request requestVo);
 
-    BoardCreateVo.Response createBoard(BoardCreateVo.Request requestVo);
+    BoardDetailVo.Response createBoard(BoardCreateVo.Request requestVo);
 
     BoardDetailVo.Response getBoardDetail(Long boardId);
 

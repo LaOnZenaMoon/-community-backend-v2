@@ -1,9 +1,11 @@
 package me.lozm.domain.board.vo;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import me.lozm.global.code.BoardType;
 import me.lozm.global.code.ContentType;
-import me.lozm.global.model.entity.HierarchicalEntity;
 import org.springframework.util.Assert;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -28,18 +30,6 @@ public class BoardCreateVo {
             this.title = title;
             this.content = content;
         }
-    }
-
-    @Getter
-    @AllArgsConstructor
-    public static class Response {
-        private final Long boardId;
-        private final HierarchicalEntity hierarchicalBoard;
-        private final BoardType boardType;
-        private final ContentType contentType;
-        private final Long viewCount;
-        private final String title;
-        private final String content;
     }
 
 }

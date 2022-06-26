@@ -28,9 +28,9 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Transactional
-    public BoardCreateVo.Response createBoard(BoardCreateVo.Request requestVo) {
+    public BoardDetailVo.Response createBoard(BoardCreateVo.Request requestVo) {
         Board board = boardRepository.save(Board.from(requestVo));
-        return boardMapper.toCreateVo(board);
+        return boardMapper.toDetailVo(board);
     }
 
     public BoardDetailVo.Response getBoardDetail(Long boardId) {
