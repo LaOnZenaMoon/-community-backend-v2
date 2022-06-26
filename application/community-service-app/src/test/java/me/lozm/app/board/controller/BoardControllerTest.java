@@ -3,6 +3,7 @@ package me.lozm.app.board.controller;
 import com.github.javafaker.Faker;
 import me.lozm.app.board.service.BoardService;
 import me.lozm.domain.board.vo.BoardCreateVo;
+import me.lozm.domain.board.vo.BoardDetailVo;
 import me.lozm.global.code.BoardType;
 import me.lozm.global.code.ContentType;
 import me.lozm.global.documentation.BaseDocumentationTest;
@@ -22,6 +23,8 @@ import java.util.List;
 import static me.lozm.global.documentation.DocumentationUtils.PREFIX_DATA;
 import static me.lozm.global.documentation.DocumentationUtils.PREFIX_PAGE_DATA;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -35,16 +38,8 @@ class BoardControllerTest extends BaseDocumentationTest {
     @Test
     void getBoards_success() throws Exception {
         // Given
-        final Faker faker = new Faker();
-
-        final int boardSize = 77;
-        for (int i = 0; i < boardSize; i++) {
-            boardService.createBoard(BoardCreateVo.Request.builder()
-                    .boardType(BoardType.FREE_CONTENTS)
-                    .contentType(ContentType.GENERAL)
-                    .title(faker.book().title())
-                    .content(faker.lorem().sentence())
-                    .build());
+        for (int i = 0; i < 77; i++) {
+            createBoard();
         }
 
         // When
@@ -61,6 +56,28 @@ class BoardControllerTest extends BaseDocumentationTest {
                         responseFields(DocumentationUtils.getSuccessDefaultResponse())
                                 .andWithPrefix(PREFIX_DATA, DocumentationUtils.getPageFieldDescriptor())
                                 .andWithPrefix(PREFIX_PAGE_DATA, getBoardDetailResponseDto())
+                ));
+    }
+
+    @DisplayName("게시글 상세 조회 성공")
+    @Test
+    void getBoardDetail_success() throws Exception {
+        // Given
+        BoardDetailVo.Response boardDetailVo = createBoard();
+
+        // When
+        ResultActions resultActions = mockMvc.perform(
+                RestDocumentationRequestBuilders.get("/boards/{boardId}", boardDetailVo.getBoardId())
+                        .header(HttpHeaders.AUTHORIZATION, DocumentationUtils.getAccessToken())
+        );
+
+        // Then
+        resultActions.andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andDo(this.documentationHandler.document(
+                        pathParameters(parameterWithName("boardId").description("게시글 ID")),
+                        responseFields(DocumentationUtils.getSuccessDefaultResponse())
+                                .andWithPrefix(PREFIX_DATA, getBoardDetailResponseDto())
                 ));
     }
 
@@ -96,6 +113,17 @@ class BoardControllerTest extends BaseDocumentationTest {
                         responseFields(DocumentationUtils.getSuccessDefaultResponse())
                                 .andWithPrefix(PREFIX_DATA, getBoardDetailResponseDto())
                 ));
+    }
+
+    private BoardDetailVo.Response createBoard() {
+        final Faker faker = new Faker();
+        BoardDetailVo.Response boardDetailVo = boardService.createBoard(BoardCreateVo.Request.builder()
+                .boardType(BoardType.FREE_CONTENTS)
+                .contentType(ContentType.GENERAL)
+                .title(faker.book().title())
+                .content(faker.lorem().sentence())
+                .build());
+        return boardDetailVo;
     }
 
     private List<FieldDescriptor> getBoardDetailResponseDto() {
