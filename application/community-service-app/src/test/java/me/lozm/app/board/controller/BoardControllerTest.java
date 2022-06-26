@@ -11,14 +11,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static me.lozm.global.documentation.DocumentationUtils.PREFIX_DATA;
 import static me.lozm.global.documentation.DocumentationUtils.PREFIX_PAGE_DATA;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,7 +28,7 @@ class BoardControllerTest extends BaseDocumentationTest {
     private BoardService boardService;
 
 
-    @DisplayName("직원 페이징 조회 성공")
+    @DisplayName("게시글 목록 조회(페이징) 성공")
     @Test
     void getBoards_ok() throws Exception {
         // Given
@@ -70,6 +70,39 @@ class BoardControllerTest extends BaseDocumentationTest {
                                         subsectionWithPath("title").type(JsonFieldType.STRING).description("제목"),
                                         subsectionWithPath("content").type(JsonFieldType.STRING).description("내용")
                                 )
+                ));
+    }
+
+    @DisplayName("게시글 생성 성공")
+    @Test
+    void createBoard_ok() throws Exception {
+        // Given
+        final String requestBody = "{\n" +
+                "  \"boardType\": \"ALL\",\n" +
+                "  \"contentType\": \"GENERAL\",\n" +
+                "  \"title\": \"첫번째 게시글\",\n" +
+                "  \"content\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\"\n" +
+                "}";
+
+        // When
+        ResultActions resultActions = mockMvc.perform(
+                RestDocumentationRequestBuilders.post("/boards")
+                        .header(HttpHeaders.AUTHORIZATION, DocumentationUtils.getAccessToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody)
+        );
+
+        // Then
+        resultActions.andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andDo(this.documentationHandler.document(
+                        requestFields(
+                                fieldWithPath("boardType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("게시글 유형", BoardType.class)),
+                                fieldWithPath("contentType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("게시글 내용 유형", ContentType.class)),
+                                fieldWithPath("title").type(JsonFieldType.STRING).description("제목"),
+                                fieldWithPath("content").type(JsonFieldType.STRING).description("내용")
+                        ),
+                        responseFields(DocumentationUtils.getSuccessDefaultResponse())
                 ));
     }
 
