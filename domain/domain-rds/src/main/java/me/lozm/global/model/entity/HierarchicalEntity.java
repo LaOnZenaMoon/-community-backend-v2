@@ -2,6 +2,7 @@ package me.lozm.global.model.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.lozm.global.model.HierarchyAble;
 import org.apache.commons.lang3.ObjectUtils;
 
 import javax.persistence.Column;
@@ -9,7 +10,7 @@ import javax.persistence.Embeddable;
 
 @Getter
 @Embeddable
-public class HierarchicalEntity {
+public class HierarchicalEntity implements HierarchyAble {
 
     private Long commonParentId;
 

@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.lozm.global.code.BoardType;
 import me.lozm.global.code.ContentType;
-import me.lozm.global.model.entity.HierarchicalEntity;
+import me.lozm.global.model.HierarchyAble;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BoardDetailDto {
@@ -16,8 +16,8 @@ public class BoardDetailDto {
     @AllArgsConstructor
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class Response {
+        private final HierarchyAble hierarchy;
         private final Long boardId;
-        private final HierarchicalEntity hierarchicalBoard;
         private final BoardType boardType;
         private final ContentType contentType;
         private final Long viewCount;

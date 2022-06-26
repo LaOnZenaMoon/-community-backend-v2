@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.lozm.global.code.BoardType;
 import me.lozm.global.code.ContentType;
+import me.lozm.global.model.HierarchyAble;
 import me.lozm.global.model.dto.PageQueryParameters;
 import me.lozm.global.model.entity.HierarchicalEntity;
 
@@ -22,7 +23,7 @@ public class BoardPageVo {
     @Getter
     public static class Element {
         private final Long boardId;
-        private final HierarchicalEntity hierarchicalBoard;
+        private final HierarchyAble hierarchy;
         private final BoardType boardType;
         private final ContentType contentType;
         private final Long viewCount;
@@ -32,7 +33,7 @@ public class BoardPageVo {
         @QueryProjection
         public Element(Long boardId, HierarchicalEntity hierarchicalBoard, BoardType boardType, ContentType contentType, Long viewCount, String title, String content) {
             this.boardId = boardId;
-            this.hierarchicalBoard = hierarchicalBoard;
+            this.hierarchy = hierarchicalBoard;
             this.boardType = boardType;
             this.contentType = contentType;
             this.viewCount = viewCount;
