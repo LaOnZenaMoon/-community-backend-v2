@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import me.lozm.utils.code.EnumModel;
 import me.lozm.utils.exception.CustomExceptionType;
 import org.springframework.restdocs.payload.FieldDescriptor;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.request.RequestParametersSnippet;
 
 import java.util.Arrays;
@@ -53,7 +54,7 @@ public class DocumentationUtils {
         stringBuilder.append(enumName);
         while (iterator.hasNext()) {
             E item = iterator.next();
-            stringBuilder.append("<br/> - ");
+            stringBuilder.append(" + \n - ");
             stringBuilder.append(item.getKey());
             stringBuilder.append(": ");
             stringBuilder.append(item.getValue());
@@ -68,7 +69,7 @@ public class DocumentationUtils {
         stringBuilder.append(enumName);
         while (iterator.hasNext()) {
             E item = iterator.next();
-            stringBuilder.append("<br/> - ");
+            stringBuilder.append(" + \n - ");
             stringBuilder.append(item.name());
         }
         return stringBuilder.toString();
@@ -78,7 +79,7 @@ public class DocumentationUtils {
     private static String makeCodeDescriptions(CustomExceptionType... exceptionTypes) {
         StringBuilder stringBuilder = new StringBuilder();
         for (CustomExceptionType exceptionType : exceptionTypes) {
-            stringBuilder.append("<br/> - ");
+            stringBuilder.append(" + \n - ");
             stringBuilder.append(exceptionType.getCode());
             stringBuilder.append(": ");
             stringBuilder.append(exceptionType.getMessage());
@@ -88,11 +89,11 @@ public class DocumentationUtils {
 
     public static List<FieldDescriptor> getPageFieldDescriptor() {
         return Arrays.asList(
-                fieldWithPath("pageNumber").description("페이지 번호 (1부터 시작)"),
-                fieldWithPath("pageSize").description("페이지 사이즈"),
-                fieldWithPath("numberOfElements").description("현재 페이지의 데이터 개수"),
-                fieldWithPath("totalElements").description("전체 데이터 개수"),
-                fieldWithPath("totalPages").description("전체 페이지 개수")
+                fieldWithPath("pageNumber").type(JsonFieldType.NUMBER).description("페이지 번호 (1부터 시작)"),
+                fieldWithPath("pageSize").type(JsonFieldType.NUMBER).description("페이지 사이즈"),
+                fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER).description("현재 페이지의 데이터 개수"),
+                fieldWithPath("totalElements").type(JsonFieldType.NUMBER).description("전체 데이터 개수"),
+                fieldWithPath("totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 개수")
         );
     }
 
@@ -101,7 +102,7 @@ public class DocumentationUtils {
         return requestParameters(
                 parameterWithName("pageNumber").description("페이지 번호 (default = 1)").optional(),
                 parameterWithName("pageSize").description("페이지 사이즈 (default = 10)").optional(),
-                parameterWithName("pageSort").description("페이지 정렬<br/>pageSort=필드명:asc/desc,필드명:asc/desc,...<br/>ex) pageSort=id:asc,name:desc").optional()
+                parameterWithName("pageSort").description("페이지 정렬 + \npageSort=필드명:asc/desc,필드명:asc/desc,... + \nex) pageSort=id:asc,name:desc").optional()
         );
 
     }

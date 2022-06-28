@@ -128,11 +128,11 @@ class BoardControllerTest extends BaseDocumentationTest {
 
     private List<FieldDescriptor> getBoardDetailResponseDto() {
         return List.of(subsectionWithPath("boardId").type(JsonFieldType.NUMBER).description("게시글 ID"),
-                subsectionWithPath("hierarchy").type(JsonFieldType.OBJECT).description("계층 게시글").optional(),
-                subsectionWithPath("hierarchy.commonParentId").type(JsonFieldType.NUMBER).description("공통 상위 게시글 ID").optional(),
-                subsectionWithPath("hierarchy.parentId").type(JsonFieldType.NUMBER).description("상위 게시글 ID").optional(),
-                subsectionWithPath("hierarchy.groupOrder").type(JsonFieldType.NUMBER).description("그룹 순서").optional(),
-                subsectionWithPath("hierarchy.groupLayer").type(JsonFieldType.NUMBER).description("그룹 레이어").optional(),
+                subsectionWithPath("hierarchicalBoard").type(JsonFieldType.OBJECT).description("계층 게시글").optional(),
+                subsectionWithPath("hierarchicalBoard.commonParentId").type(JsonFieldType.NUMBER).description("공통 상위 게시글 ID").optional(),
+                subsectionWithPath("hierarchicalBoard.parentId").type(JsonFieldType.NUMBER).description("상위 게시글 ID").optional(),
+                subsectionWithPath("hierarchicalBoard.groupOrder").type(JsonFieldType.NUMBER).description("그룹 순서").optional(),
+                subsectionWithPath("hierarchicalBoard.groupLayer").type(JsonFieldType.NUMBER).description("그룹 레이어").optional(),
                 subsectionWithPath("boardType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("게시글 유형", BoardType.class)),
                 subsectionWithPath("contentType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("게시글 내용 유형", ContentType.class)),
                 subsectionWithPath("viewCount").type(JsonFieldType.NUMBER).description("게시글 조회수"),

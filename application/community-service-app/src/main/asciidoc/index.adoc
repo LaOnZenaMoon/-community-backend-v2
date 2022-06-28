@@ -1,0 +1,32 @@
+= [community-service-app] REST API Document
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:sectlinks:
+:docinfo: shared-head
+
+== Common
+
+=== Response Fields
+
+|===
+| field | 설명
+
+| `code`
+| 응답 상세 코드
+
+| `message`
+| 응답 메세지
+
+| `timestamp`
+| 응답 시간
+
+| `data`
+| 실제 반환될 데이터
+|===
+
+
+
+include::resources/boards.adoc[]
