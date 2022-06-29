@@ -97,4 +97,8 @@ public class Board extends BaseEntity {
         }
     }
 
+    public void updateIsUse(boolean isUse) {
+        this.isUse = isUse;
+    }
+
 }

@@ -62,4 +62,10 @@ public class BoardController {
         return CommonResponseDto.success(responseDto);
     }
 
+    @DeleteMapping("{boardId}")
+    public CommonResponseDto deleteBoard(@PathVariable("boardId") Long boardId) {
+        boardService.deleteBoard(boardId);
+        return CommonResponseDto.success();
+    }
+
 }

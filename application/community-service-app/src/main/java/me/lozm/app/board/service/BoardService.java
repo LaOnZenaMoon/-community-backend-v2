@@ -15,4 +15,6 @@ public interface BoardService {
     BoardDetailVo.Response createBoard(BoardCreateVo.Request requestVo);
 
     BoardDetailVo.Response updateBoard(BoardUpdateVo.Request boardUpdateVo);
+
+    void deleteBoard(Long boardId);
 }

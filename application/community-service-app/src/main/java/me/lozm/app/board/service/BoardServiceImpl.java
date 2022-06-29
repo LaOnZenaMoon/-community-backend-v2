@@ -49,4 +49,11 @@ public class BoardServiceImpl implements BoardService {
         return boardMapper.toDetailVo(board);
     }
 
+    @Override
+    @Transactional
+    public void deleteBoard(Long boardId) {
+        Board board = boardHelperService.getBoard(boardId);
+        board.updateIsUse(false);
+    }
+
 }

@@ -24,6 +24,7 @@ import java.util.List;
 import static me.lozm.global.documentation.DocumentationUtils.PREFIX_DATA;
 import static me.lozm.global.documentation.DocumentationUtils.PREFIX_PAGE_DATA;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -169,6 +170,30 @@ class BoardControllerTest extends BaseDocumentationTest {
         assertEquals(contentType, boardDetail.getContentType());
         assertEquals(title, boardDetail.getTitle());
         assertEquals(content, boardDetail.getContent());
+    }
+
+    @DisplayName("게시글 삭제 성공")
+    @Test
+    void deleteBoard_success() throws Exception {
+        // Given
+        BoardDetailVo.Response board = createBoard();
+        final Long boardId = board.getBoardId();
+
+        // When
+        ResultActions resultActions = mockMvc.perform(
+                RestDocumentationRequestBuilders.delete("/boards/{boardId}", boardId)
+                        .header(HttpHeaders.AUTHORIZATION, DocumentationUtils.getAccessToken())
+        );
+
+        // Then
+        resultActions.andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andDo(this.documentationHandler.document(
+                        pathParameters(parameterWithName("boardId").description("게시글 ID")),
+                        responseFields(DocumentationUtils.getSuccessDefaultResponse())
+                ));
+
+        assertThrows(IllegalArgumentException.class, () -> boardService.getBoardDetail(boardId));
     }
 
     private BoardDetailVo.Response createBoard() {

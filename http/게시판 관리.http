@@ -292,10 +292,20 @@ Content-Type: application/json
 client.test("Request executed successfully", function() {
   client.assert(response.status == 200, "Response status is wrong");
 });
+client.global.set("BOARD_ID", response.body.data.boardId);
 %}
 
 ### 게시글 상세 조회
-GET {{service-app}}/boards/1
+GET {{service-app}}/boards/{{BOARD_ID}}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status == 200, "Response status is wrong");
+});
+%}
+
+### 게시글 삭제
+DELETE {{service-app}}/boards/{{BOARD_ID}}
 
 > {%
 client.test("Request executed successfully", function() {
