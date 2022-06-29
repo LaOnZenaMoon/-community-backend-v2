@@ -28,5 +28,6 @@
 | 데이터
 |===
 
+== REST API
 
 include::{adocResourcesDir}/boards.adoc[]
