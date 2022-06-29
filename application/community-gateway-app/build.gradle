@@ -1,6 +1,6 @@
 dependencies {
-    implementation project(":core:core-utils")
-    implementation project(":core:core-web")
+    implementation project(':core:core-utils')
+    implementation project(':core:core-web')
 
     implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'

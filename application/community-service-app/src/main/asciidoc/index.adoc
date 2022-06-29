@@ -6,6 +6,7 @@
 :toclevels: 3
 :sectlinks:
 :docinfo: shared-head
+:adocResourcesDir: src/main/asciidoc/resources
 
 == Common
 
@@ -24,9 +25,8 @@
 | 응답 시간
 
 | `data`
-| 실제 반환될 데이터
+| 데이터
 |===
 
 
-
-include::resources/boards.adoc[]
+include::{adocResourcesDir}/boards.adoc[]

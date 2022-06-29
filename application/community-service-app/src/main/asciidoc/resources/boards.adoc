@@ -1,32 +1,32 @@
-== Boards
+=== Boards
 
-=== /boards *[GET]*
+==== *[GET]* /boards
 게시글 목록 조회 (`Pagination`)
 
-==== Request Query Parameters
+===== Request Query Parameters
 include::{snippets}/get-boards_success/request-parameters.adoc[]
 
-==== Response Body Fields
+===== Response Body Fields
 include::{snippets}/get-boards_success/response-fields.adoc[]
 
 
 
-=== /boards/{boardId} *[GET]*
+==== *[GET]* /boards/{boardId}
 게시글 상세 조회
 
-==== Request Path Variables
+===== Request Path Variables
 include::{snippets}/get-board-detail_success/path-parameters.adoc[]
 
-==== Response Body Fields
+===== Response Body Fields
 include::{snippets}/get-board-detail_success/response-fields.adoc[]
 
 
 
-=== /boards *[POST]*
+==== *[POST]* /boards
 게시글 생성
 
-==== Request Body Fields
+===== Request Body Fields
 include::{snippets}/create-board_success/request-fields.adoc[]
 
-==== Response Body Fields
+===== Response Body Fields
 include::{snippets}/create-board_success/response-fields.adoc[]

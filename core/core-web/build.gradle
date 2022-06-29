@@ -2,7 +2,7 @@ jar.enabled(true)
 bootJar.enabled(false)
 
 dependencies {
-    implementation project(":core:core-utils")
+    implementation project(':core:core-utils')
 
     api 'org.springframework.boot:spring-boot-starter-web'
     api 'org.springframework.boot:spring-boot-starter-actuator'

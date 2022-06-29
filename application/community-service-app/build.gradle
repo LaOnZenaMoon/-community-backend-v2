@@ -1,13 +1,12 @@
 plugins {
-    id 'org.asciidoctor.convert' version '2.1.0'
-    id 'org.kordamp.gradle.livereload' version '0.4.0'
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
 }
 
 dependencies {
-    implementation project(":core:core-utils")
-    implementation project(":core:core-web")
+    implementation project(':core:core-utils')
+    implementation project(':core:core-web')
 
-    implementation project(":domain:domain-rds")
+    implementation project(':domain:domain-rds')
 
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
@@ -20,14 +19,29 @@ ext {
 }
 
 asciidoctor {
-    logger.quiet "#######  asciidoctor #######"
     sourceDir 'src/main/asciidoc'
     attributes 'snippets': snippetsDir
     inputs.dir snippetsDir
     dependsOn test
+
+    doFirst {
+        println '===== start asciidoctor ====='
+        println '===== start delete previous asciidoctor document ====='
+        delete file('src/main/resources/static/docs')
+        println '===== finish delete previous asciidoctor document ====='
+    }
+
+    doLast {
+        println '===== start copy asciidoctor document ====='
+        copy {
+            from file('build/docs/asciidoc/index.html')
+            into file('src/main/resources/static/docs')
+        }
+        println '===== finish copy asciidoctor document ====='
+        println '===== finish asciidoctor ====='
+    }
 }
 
-liveReload {
-    docRoot asciidoctor.outputDir.canonicalPath
+bootJar {
     dependsOn asciidoctor
 }
