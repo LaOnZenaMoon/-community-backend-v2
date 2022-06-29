@@ -1,5 +1,6 @@
 package me.lozm.global.documentation;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -28,6 +29,8 @@ public abstract class BaseDocumentationTest {
 
     protected MockMvc mockMvc;
     protected RestDocumentationResultHandler documentationHandler;
+
+    protected ObjectMapper objectMapper;
 
 
     @BeforeEach

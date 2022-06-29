@@ -41,3 +41,14 @@ include::{snippets}/update-board_success/request-fields.adoc[]
 
 ===== Response Body Fields
 include::{snippets}/update-board_success/response-fields.adoc[]
+
+
+
+==== *[DELETE]* /boards
+게시글 삭제
+
+===== Request Path Variables
+include::{snippets}/delete-board_success/path-parameters.adoc[]
+
+===== Response Body Fields
+include::{snippets}/delete-board_success/response-fields.adoc[]

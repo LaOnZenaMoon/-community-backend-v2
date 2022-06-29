@@ -21,8 +21,8 @@
 | `message`
 | 응답 메세지
 
-| `timestamp`
-| 응답 시간
+| `responseDateTime`
+| 응답일시
 
 | `data`
 | 데이터

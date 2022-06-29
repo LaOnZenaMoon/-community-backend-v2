@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
+import static me.lozm.utils.exception.DateUtils.DATETIME_PATTERN;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Slf4j
@@ -22,12 +23,10 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CommonResponseDto<T> {
 
-    private static final String TIMESTAMP_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
-
     private String code;
     private String message;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIMESTAMP_PATTERN)
-    private LocalDateTime timestamp;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATETIME_PATTERN)
+    private LocalDateTime responseDateTime;
     private T data;
 
     @Builder
@@ -35,7 +34,7 @@ public class CommonResponseDto<T> {
         this.code = code;
         this.message = message;
         this.data = data;
-        this.timestamp = LocalDateTime.now();
+        this.responseDateTime = LocalDateTime.now();
     }
 
     public static CommonResponseDto success() {

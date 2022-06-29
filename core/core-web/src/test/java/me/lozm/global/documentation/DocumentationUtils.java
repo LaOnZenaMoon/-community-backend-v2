@@ -27,7 +27,7 @@ public class DocumentationUtils {
 
     public static List<FieldDescriptor> getSuccessDefaultResponse() {
         return List.of(
-                fieldWithPath("timestamp").description("응답 시간")
+                fieldWithPath("responseDateTime").description("응답일시")
         );
     }
 
@@ -35,7 +35,7 @@ public class DocumentationUtils {
         return List.of(
                 fieldWithPath("code").description(String.format("응답 코드값%s", makeCodeDescriptions(exceptionTypes))),
                 fieldWithPath("message").description("응답 메세지"),
-                fieldWithPath("timestamp").description("응답 시간")
+                fieldWithPath("responseDateTime").description("응답일시")
         );
     }
 

@@ -2,7 +2,6 @@ package me.lozm.app.board.controller;
 
 import com.github.javafaker.Faker;
 import me.lozm.app.board.service.BoardService;
-import me.lozm.domain.board.repository.BoardRepository;
 import me.lozm.domain.board.vo.BoardCreateVo;
 import me.lozm.domain.board.vo.BoardDetailVo;
 import me.lozm.global.code.BoardType;
@@ -35,9 +34,6 @@ class BoardControllerTest extends BaseDocumentationTest {
 
     @Autowired
     private BoardService boardService;
-
-    @Autowired
-    private BoardRepository boardRepository;
 
 
     @DisplayName("게시글 목록 조회(페이징) 성공")
@@ -91,11 +87,18 @@ class BoardControllerTest extends BaseDocumentationTest {
     @Test
     void createBoard_success() throws Exception {
         // Given
+        final Faker faker = new Faker();
+
+        final BoardType boardType = BoardType.MARKET;
+        final ContentType contentType = ContentType.NOTICE;
+        final String title = faker.book().title();
+        final String content = faker.lorem().sentence(10);
+
         final String requestBody = "{\n" +
-                "  \"boardType\": \"ALL\",\n" +
-                "  \"contentType\": \"GENERAL\",\n" +
-                "  \"title\": \"첫번째 게시글\",\n" +
-                "  \"content\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\"\n" +
+                "  \"boardType\": \"" + boardType + "\",\n" +
+                "  \"contentType\": \"" + contentType + "\",\n" +
+                "  \"title\": \"" + title + "\",\n" +
+                "  \"content\": \"" + content + "\"\n" +
                 "}";
 
         // When
@@ -119,6 +122,14 @@ class BoardControllerTest extends BaseDocumentationTest {
                         responseFields(DocumentationUtils.getSuccessDefaultResponse())
                                 .andWithPrefix(PREFIX_DATA, getBoardDetailResponseDto())
                 ));
+
+//        MockHttpServletResponse response = resultActions.andReturn().getResponse();
+//        BoardDetailDto.Response responseDto = objectMapper.readValue(response.getContentAsString(), BoardDetailDto.Response.class);
+//
+//        assertEquals(boardType, responseDto.getBoardType());
+//        assertEquals(contentType, responseDto.getContentType());
+//        assertEquals(title, responseDto.getTitle());
+//        assertEquals(content, responseDto.getContent());
     }
 
     @DisplayName("게시글 수정 성공")
