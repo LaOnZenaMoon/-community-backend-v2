@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.lozm.domain.board.vo.BoardCreateVo;
+import me.lozm.domain.board.vo.BoardUpdateVo;
 import me.lozm.global.code.BoardType;
 import me.lozm.global.code.ContentType;
 import me.lozm.global.code.converter.BoardTypeConverter;
@@ -17,6 +18,9 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.List;
+
+import static org.apache.commons.lang3.ObjectUtils.isNotEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -73,6 +77,24 @@ public class Board extends BaseEntity {
         board.title = boardCreateVo.getTitle();
         board.content = boardCreateVo.getContent();
         return board;
+    }
+
+    public void update(BoardUpdateVo.Request boardUpdateVo) {
+        if (isNotEmpty(boardUpdateVo.getBoardType())) {
+            this.boardType = boardUpdateVo.getBoardType();
+        }
+
+        if (isNotEmpty(boardUpdateVo.getContentType())) {
+            this.contentType = boardUpdateVo.getContentType();
+        }
+
+        if (isNotBlank(boardUpdateVo.getTitle())) {
+            this.title = boardUpdateVo.getTitle();
+        }
+
+        if (isNotBlank(boardUpdateVo.getContent())) {
+            this.content = boardUpdateVo.getContent();
+        }
     }
 
 }

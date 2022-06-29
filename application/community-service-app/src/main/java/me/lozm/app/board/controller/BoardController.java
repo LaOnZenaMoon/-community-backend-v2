@@ -5,10 +5,12 @@ import me.lozm.app.board.service.BoardService;
 import me.lozm.domain.board.dto.BoardCreateDto;
 import me.lozm.domain.board.dto.BoardDetailDto;
 import me.lozm.domain.board.dto.BoardPageDto;
+import me.lozm.domain.board.dto.BoardUpdateDto;
 import me.lozm.domain.board.mapper.BoardMapper;
 import me.lozm.domain.board.vo.BoardCreateVo;
 import me.lozm.domain.board.vo.BoardDetailVo;
 import me.lozm.domain.board.vo.BoardPageVo;
+import me.lozm.domain.board.vo.BoardUpdateVo;
 import me.lozm.global.model.CommonResponseDto;
 import me.lozm.global.model.dto.CommonPageResponseDto;
 import me.lozm.global.model.dto.PageQueryParameters;
@@ -48,6 +50,14 @@ public class BoardController {
     public CommonResponseDto<BoardDetailDto.Response> createBoard(@RequestBody @Validated BoardCreateDto.Request requestDto) {
         BoardCreateVo.Request boardCreateVo = boardMapper.toCreateVo(requestDto);
         BoardDetailVo.Response boardDetailVo = boardService.createBoard(boardCreateVo);
+        BoardDetailDto.Response responseDto = boardMapper.toDetailDto(boardDetailVo);
+        return CommonResponseDto.success(responseDto);
+    }
+
+    @PutMapping
+    public CommonResponseDto<BoardDetailDto.Response> updateBoard(@RequestBody @Validated BoardUpdateDto.Request requestDto) {
+        BoardUpdateVo.Request boardUpdateVo = boardMapper.toUpdateVo(requestDto);
+        BoardDetailVo.Response boardDetailVo = boardService.updateBoard(boardUpdateVo);
         BoardDetailDto.Response responseDto = boardMapper.toDetailDto(boardDetailVo);
         return CommonResponseDto.success(responseDto);
     }

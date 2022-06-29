@@ -30,3 +30,14 @@ include::{snippets}/create-board_success/request-fields.adoc[]
 
 ===== Response Body Fields
 include::{snippets}/create-board_success/response-fields.adoc[]
+
+
+
+==== *[PUT]* /boards
+게시글 수정
+
+===== Request Body Fields
+include::{snippets}/update-board_success/request-fields.adoc[]
+
+===== Response Body Fields
+include::{snippets}/update-board_success/response-fields.adoc[]

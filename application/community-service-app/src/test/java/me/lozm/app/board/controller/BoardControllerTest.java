@@ -2,6 +2,7 @@ package me.lozm.app.board.controller;
 
 import com.github.javafaker.Faker;
 import me.lozm.app.board.service.BoardService;
+import me.lozm.domain.board.repository.BoardRepository;
 import me.lozm.domain.board.vo.BoardCreateVo;
 import me.lozm.domain.board.vo.BoardDetailVo;
 import me.lozm.global.code.BoardType;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import static me.lozm.global.documentation.DocumentationUtils.PREFIX_DATA;
 import static me.lozm.global.documentation.DocumentationUtils.PREFIX_PAGE_DATA;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -32,6 +34,9 @@ class BoardControllerTest extends BaseDocumentationTest {
 
     @Autowired
     private BoardService boardService;
+
+    @Autowired
+    private BoardRepository boardRepository;
 
 
     @DisplayName("게시글 목록 조회(페이징) 성공")
@@ -113,6 +118,57 @@ class BoardControllerTest extends BaseDocumentationTest {
                         responseFields(DocumentationUtils.getSuccessDefaultResponse())
                                 .andWithPrefix(PREFIX_DATA, getBoardDetailResponseDto())
                 ));
+    }
+
+    @DisplayName("게시글 수정 성공")
+    @Test
+    void updateBoard_success() throws Exception {
+        // Given
+        BoardDetailVo.Response board = createBoard();
+
+        final Long boardId = board.getBoardId();
+        final BoardType boardType = BoardType.NEWS;
+        final ContentType contentType = ContentType.EVENT;
+        final String title = board.getTitle() + " updated";
+        final String content = board.getContent() + " updated";
+
+        final String requestBody = "{\n" +
+                "  \"boardId\": " + boardId + ",\n" +
+                "  \"boardType\": \"" + boardType + "\",\n" +
+                "  \"contentType\": \"" + contentType + "\",\n" +
+                "  \"title\": \"" + title + "\",\n" +
+                "  \"content\": \"" + content + "\"\n" +
+                "}";
+
+        // When
+        ResultActions resultActions = mockMvc.perform(
+                RestDocumentationRequestBuilders.put("/boards")
+                        .header(HttpHeaders.AUTHORIZATION, DocumentationUtils.getAccessToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody)
+        );
+
+        // Then
+        resultActions.andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andDo(this.documentationHandler.document(
+                        requestFields(
+                                fieldWithPath("boardId").type(JsonFieldType.NUMBER).description("게시글 ID"),
+                                fieldWithPath("boardType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("게시글 유형", BoardType.class)).optional(),
+                                fieldWithPath("contentType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("게시글 내용 유형", ContentType.class)).optional(),
+                                fieldWithPath("title").type(JsonFieldType.STRING).description("제목").optional(),
+                                fieldWithPath("content").type(JsonFieldType.STRING).description("내용").optional()
+                        ),
+                        responseFields(DocumentationUtils.getSuccessDefaultResponse())
+                                .andWithPrefix(PREFIX_DATA, getBoardDetailResponseDto())
+                ));
+
+        BoardDetailVo.Response boardDetail = boardService.getBoardDetail(boardId);
+        assertEquals(boardId, boardDetail.getBoardId());
+        assertEquals(boardType, boardDetail.getBoardType());
+        assertEquals(contentType, boardDetail.getContentType());
+        assertEquals(title, boardDetail.getTitle());
+        assertEquals(content, boardDetail.getContent());
     }
 
     private BoardDetailVo.Response createBoard() {
