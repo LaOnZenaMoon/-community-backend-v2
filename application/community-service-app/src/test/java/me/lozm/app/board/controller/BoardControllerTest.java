@@ -2,6 +2,8 @@ package me.lozm.app.board.controller;
 
 import com.github.javafaker.Faker;
 import me.lozm.app.board.service.BoardService;
+import me.lozm.domain.board.entity.Board;
+import me.lozm.domain.board.service.BoardHelperService;
 import me.lozm.domain.board.vo.BoardDetailVo;
 import me.lozm.global.code.BoardType;
 import me.lozm.global.code.ContentType;
@@ -34,6 +36,9 @@ class BoardControllerTest extends BaseDocumentationTest {
 
     @Autowired
     private BoardService boardService;
+
+    @Autowired
+    private BoardHelperService boardHelperService;
 
 
     @DisplayName("게시글 목록 조회(페이징) 성공")
@@ -84,9 +89,9 @@ class BoardControllerTest extends BaseDocumentationTest {
                                 .andWithPrefix(PREFIX_DATA, getBoardDetailResponseDto())
                 ));
 
-        BoardDetailVo.Response boardDetail = boardService.getBoardDetail(boardId);
-        assertEquals(boardId, boardDetail.getBoardId());
-        assertEquals(viewCount + 1, boardDetail.getBoardId());
+        Board board = boardHelperService.getBoard(boardId);
+        assertEquals(boardId, board.getId());
+        assertEquals(viewCount + 1, board.getViewCount());
     }
 
     @DisplayName("게시글 생성 성공")
@@ -142,13 +147,13 @@ class BoardControllerTest extends BaseDocumentationTest {
     @Test
     void updateBoard_success() throws Exception {
         // Given
-        BoardDetailVo.Response board = createBoard(boardService);
+        BoardDetailVo.Response boardDetailVo = createBoard(boardService);
 
-        final Long boardId = board.getBoardId();
+        final Long boardId = boardDetailVo.getBoardId();
         final BoardType boardType = BoardType.NEWS;
         final ContentType contentType = ContentType.EVENT;
-        final String title = board.getTitle() + " updated";
-        final String content = board.getContent() + " updated";
+        final String title = boardDetailVo.getTitle() + " updated";
+        final String content = boardDetailVo.getContent() + " updated";
 
         final String requestBody = "{\n" +
                 "  \"boardId\": " + boardId + ",\n" +
@@ -181,12 +186,12 @@ class BoardControllerTest extends BaseDocumentationTest {
                                 .andWithPrefix(PREFIX_DATA, getBoardDetailResponseDto())
                 ));
 
-        BoardDetailVo.Response boardDetail = boardService.getBoardDetail(boardId);
-        assertEquals(boardId, boardDetail.getBoardId());
-        assertEquals(boardType, boardDetail.getBoardType());
-        assertEquals(contentType, boardDetail.getContentType());
-        assertEquals(title, boardDetail.getTitle());
-        assertEquals(content, boardDetail.getContent());
+        Board board = boardHelperService.getBoard(boardId);
+        assertEquals(boardId, board.getId());
+        assertEquals(boardType, board.getBoardType());
+        assertEquals(contentType, board.getContentType());
+        assertEquals(title, board.getTitle());
+        assertEquals(content, board.getContent());
     }
 
     @DisplayName("게시글 삭제 성공")
