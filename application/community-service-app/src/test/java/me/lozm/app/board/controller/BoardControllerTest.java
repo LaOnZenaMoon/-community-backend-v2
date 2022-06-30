@@ -66,10 +66,12 @@ class BoardControllerTest extends BaseDocumentationTest {
     void getBoardDetail_success() throws Exception {
         // Given
         BoardDetailVo.Response boardDetailVo = createBoard(boardService);
+        final Long boardId = boardDetailVo.getBoardId();
+        final Long viewCount = boardDetailVo.getViewCount();
 
         // When
         ResultActions resultActions = mockMvc.perform(
-                RestDocumentationRequestBuilders.get("/boards/{boardId}", boardDetailVo.getBoardId())
+                RestDocumentationRequestBuilders.get("/boards/{boardId}", boardId)
                         .header(HttpHeaders.AUTHORIZATION, DocumentationUtils.getAccessToken())
         );
 
@@ -81,6 +83,10 @@ class BoardControllerTest extends BaseDocumentationTest {
                         responseFields(DocumentationUtils.getSuccessDefaultResponse())
                                 .andWithPrefix(PREFIX_DATA, getBoardDetailResponseDto())
                 ));
+
+        BoardDetailVo.Response boardDetail = boardService.getBoardDetail(boardId);
+        assertEquals(boardId, boardDetail.getBoardId());
+        assertEquals(viewCount + 1, boardDetail.getBoardId());
     }
 
     @DisplayName("게시글 생성 성공")
