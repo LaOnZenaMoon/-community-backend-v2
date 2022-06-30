@@ -37,9 +37,11 @@ public abstract class BaseDocumentationTest {
     public void setup(WebApplicationContext context, RestDocumentationContextProvider document) {
         this.documentationHandler = document("{method-name}",
                 preprocessRequest(prettyPrint()),
-                preprocessResponse(prettyPrint()));
+                preprocessResponse(prettyPrint())
+        );
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(documentationConfiguration(document))
+                .alwaysDo(this.documentationHandler)
                 .addFilters(new CharacterEncodingFilter("UTF-8", true))
                 .build();
     }

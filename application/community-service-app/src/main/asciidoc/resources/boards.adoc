@@ -6,8 +6,14 @@
 ===== Request Query Parameters
 include::{snippets}/get-boards_success/request-parameters.adoc[]
 
+===== Request Sample
+include::{snippets}/get-boards_success/http-request.adoc[]
+
 ===== Response Body Fields
 include::{snippets}/get-boards_success/response-fields.adoc[]
+
+===== Response Sample
+include::{snippets}/get-boards_success/http-response.adoc[]
 
 
 
@@ -17,8 +23,14 @@ include::{snippets}/get-boards_success/response-fields.adoc[]
 ===== Request Path Variables
 include::{snippets}/get-board-detail_success/path-parameters.adoc[]
 
+===== Request Sample
+include::{snippets}/get-board-detail_success/http-request.adoc[]
+
 ===== Response Body Fields
 include::{snippets}/get-board-detail_success/response-fields.adoc[]
+
+===== Response Sample
+include::{snippets}/get-board-detail_success/http-response.adoc[]
 
 
 
@@ -28,8 +40,14 @@ include::{snippets}/get-board-detail_success/response-fields.adoc[]
 ===== Request Body Fields
 include::{snippets}/create-board_success/request-fields.adoc[]
 
+===== Request Sample
+include::{snippets}/create-board_success/http-request.adoc[]
+
 ===== Response Body Fields
 include::{snippets}/create-board_success/response-fields.adoc[]
+
+===== Response Sample
+include::{snippets}/create-board_success/http-response.adoc[]
 
 
 
@@ -39,8 +57,14 @@ include::{snippets}/create-board_success/response-fields.adoc[]
 ===== Request Body Fields
 include::{snippets}/update-board_success/request-fields.adoc[]
 
+===== Request Sample
+include::{snippets}/update-board_success/http-request.adoc[]
+
 ===== Response Body Fields
 include::{snippets}/update-board_success/response-fields.adoc[]
+
+===== Response Sample
+include::{snippets}/update-board_success/http-response.adoc[]
 
 
 
@@ -50,5 +74,11 @@ include::{snippets}/update-board_success/response-fields.adoc[]
 ===== Request Path Variables
 include::{snippets}/delete-board_success/path-parameters.adoc[]
 
+===== Request Sample
+include::{snippets}/delete-board_success/http-request.adoc[]
+
 ===== Response Body Fields
 include::{snippets}/delete-board_success/response-fields.adoc[]
+
+===== Response Sample
+include::{snippets}/delete-board_success/http-response.adoc[]
