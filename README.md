@@ -27,6 +27,8 @@
 
 #### community-service-app
 * The server for community operations
+* REST API Document
+  * http://{host}:8080/docs/index.html
 
 
 ## Skills

@@ -2,7 +2,6 @@ package me.lozm.app.board.controller;
 
 import com.github.javafaker.Faker;
 import me.lozm.app.board.service.BoardService;
-import me.lozm.domain.board.vo.BoardCreateVo;
 import me.lozm.domain.board.vo.BoardDetailVo;
 import me.lozm.global.code.BoardType;
 import me.lozm.global.code.ContentType;
@@ -20,6 +19,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
+import static me.lozm.app.board.BoardTestUtils.createBoard;
 import static me.lozm.global.documentation.DocumentationUtils.PREFIX_DATA;
 import static me.lozm.global.documentation.DocumentationUtils.PREFIX_PAGE_DATA;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,7 +41,7 @@ class BoardControllerTest extends BaseDocumentationTest {
     void getBoards_success() throws Exception {
         // Given
         for (int i = 0; i < 77; i++) {
-            createBoard();
+            createBoard(boardService);
         }
 
         // When
@@ -65,7 +65,7 @@ class BoardControllerTest extends BaseDocumentationTest {
     @Test
     void getBoardDetail_success() throws Exception {
         // Given
-        BoardDetailVo.Response boardDetailVo = createBoard();
+        BoardDetailVo.Response boardDetailVo = createBoard(boardService);
 
         // When
         ResultActions resultActions = mockMvc.perform(
@@ -136,7 +136,7 @@ class BoardControllerTest extends BaseDocumentationTest {
     @Test
     void updateBoard_success() throws Exception {
         // Given
-        BoardDetailVo.Response board = createBoard();
+        BoardDetailVo.Response board = createBoard(boardService);
 
         final Long boardId = board.getBoardId();
         final BoardType boardType = BoardType.NEWS;
@@ -187,7 +187,7 @@ class BoardControllerTest extends BaseDocumentationTest {
     @Test
     void deleteBoard_success() throws Exception {
         // Given
-        BoardDetailVo.Response board = createBoard();
+        BoardDetailVo.Response board = createBoard(boardService);
         final Long boardId = board.getBoardId();
 
         // When
@@ -205,17 +205,6 @@ class BoardControllerTest extends BaseDocumentationTest {
                 ));
 
         assertThrows(IllegalArgumentException.class, () -> boardService.getBoardDetail(boardId));
-    }
-
-    private BoardDetailVo.Response createBoard() {
-        final Faker faker = new Faker();
-        BoardDetailVo.Response boardDetailVo = boardService.createBoard(BoardCreateVo.Request.builder()
-                .boardType(BoardType.FREE_CONTENTS)
-                .contentType(ContentType.GENERAL)
-                .title(faker.book().title())
-                .content(faker.lorem().sentence())
-                .build());
-        return boardDetailVo;
     }
 
     private List<FieldDescriptor> getBoardDetailResponseDto() {

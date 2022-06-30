@@ -101,4 +101,8 @@ public class Board extends BaseEntity {
         this.isUse = isUse;
     }
 
+    public void addViewCount() {
+        viewCount += 1;
+    }
+
 }

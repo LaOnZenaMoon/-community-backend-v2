@@ -30,8 +30,10 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public BoardDetailVo.Response getBoardDetail(Long boardId) {
-        Board board = boardHelperService.getBoard(boardId);
+        Board board = boardHelperService.getBoardUsingLock(boardId);
+        board.addViewCount();
         return boardMapper.toDetailVo(board);
     }
 

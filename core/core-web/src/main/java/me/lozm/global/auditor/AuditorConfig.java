@@ -25,13 +25,18 @@ public class AuditorConfig implements AuditorAware<Long> {
 
     @Override
     public Optional<Long> getCurrentAuditor() {
-        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
-        Jwt jwt = getJwt((ServletRequestAttributes) requestAttributes);
-        if (isEmpty(jwt)) {
+        try {
+            RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+            Jwt jwt = getJwt((ServletRequestAttributes) requestAttributes);
+            if (isEmpty(jwt)) {
+                throw new IllegalStateException("JWT is empty.");
+            }
+
+            return Optional.ofNullable(JwtUtils.getUserIdFromJwt(jwt));
+        } catch (IllegalStateException e) {
+            log.info(e.getMessage());
             return Optional.of(-1L);
         }
-
-        return Optional.ofNullable(JwtUtils.getUserIdFromJwt(jwt));
     }
 
     private Jwt getJwt(ServletRequestAttributes requestAttributes) {
