@@ -14,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.nio.file.AccessDeniedException;
 
@@ -59,6 +60,12 @@ public class RestControllerAdviceConfig {
     protected HttpEntity<Object> handleIllegalArgumentException(final IllegalArgumentException e) {
         log.info(">> IllegalArgumentException, message: {}", e.getMessage());
         return CommonResponseDto.badRequest(e.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    protected HttpEntity<Object> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+        log.info(">> handleMethodArgumentTypeMismatchException, message: {}", e.getMessage());
+        return CommonResponseDto.badRequest(CustomExceptionType.INVALID_REQUEST_PARAMETERS, CustomExceptionType.INVALID_REQUEST_PARAMETERS.getMessage());
     }
 
     @ExceptionHandler(BadRequestException.class)

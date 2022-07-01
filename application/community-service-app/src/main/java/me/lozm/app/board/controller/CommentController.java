@@ -2,16 +2,19 @@ package me.lozm.app.board.controller;
 
 import lombok.RequiredArgsConstructor;
 import me.lozm.app.board.service.CommentService;
+import me.lozm.domain.board.dto.CommentCreateDto;
+import me.lozm.domain.board.dto.CommentDetailDto;
 import me.lozm.domain.board.dto.CommentPageDto;
 import me.lozm.domain.board.mapper.CommentMapper;
+import me.lozm.domain.board.vo.CommentCreateVo;
+import me.lozm.domain.board.vo.CommentDetailVo;
 import me.lozm.domain.board.vo.CommentPageVo;
 import me.lozm.global.model.CommonResponseDto;
 import me.lozm.global.model.dto.CommonPageResponseDto;
 import me.lozm.global.model.dto.PageQueryParameters;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,6 +36,16 @@ public class CommentController {
 
         List<CommentPageDto.Response> responseDtoList = responsePageVo.getContent().stream().map(commentMapper::toPageDto).collect(Collectors.toList());
         return CommonResponseDto.success(new CommonPageResponseDto<>(responsePageVo, responseDtoList));
+    }
+
+    @PostMapping("boards/{boardId}/comments")
+    public CommonResponseDto<CommentDetailDto.Response> createComment(@RequestBody @Validated CommentCreateDto.Request requestDto,
+                                                                      @PathVariable("boardId") Long boardId) {
+
+        CommentCreateVo.Request commentCreateVo = commentMapper.toCreateVo(boardId, requestDto);
+        CommentDetailVo.Response commentDetailVo = commentService.createComment(commentCreateVo);
+        CommentDetailDto.Response responseDto = commentMapper.toDetailDto(commentDetailVo);
+        return CommonResponseDto.success(responseDto);
     }
 
 }

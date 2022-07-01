@@ -4,10 +4,14 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.lozm.domain.board.vo.CommentCreateVo;
 import me.lozm.global.code.CommentType;
 import me.lozm.global.code.converter.CommentTypeConverter;
 import me.lozm.global.model.entity.BaseEntity;
 import me.lozm.global.model.entity.HierarchicalEntity;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -18,6 +22,9 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "COMMENTS")
+@Where(clause = "IS_USE = true")
+@DynamicUpdate
+@DynamicInsert
 @SequenceGenerator(name = "COMMENT_SEQ_GEN", sequenceName = "COMMENT_SEQ")
 public class Comment extends BaseEntity {
 
@@ -44,5 +51,14 @@ public class Comment extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOARD_ID")
     private Board board;
+
+    public static Comment of(Board board, CommentCreateVo.Request commentCreateVo) {
+        Comment comment = new Comment();
+        comment.isUse = true;
+        comment.board = board;
+        comment.commentType = commentCreateVo.getCommentType();
+        comment.content = commentCreateVo.getContent();
+        return comment;
+    }
 
 }
