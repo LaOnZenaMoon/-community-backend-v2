@@ -18,7 +18,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "COMMENTS")
-@SequenceGenerator(name = "COMMENT_SEQ_GEN", sequenceName = "COMMENT_SEQ", allocationSize = 50)
+@SequenceGenerator(name = "COMMENT_SEQ_GEN", sequenceName = "COMMENT_SEQ")
 public class Comment extends BaseEntity {
 
     @Id
