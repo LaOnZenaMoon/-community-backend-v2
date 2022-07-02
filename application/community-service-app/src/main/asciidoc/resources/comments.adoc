@@ -1,0 +1,70 @@
+=== Boards
+
+==== *[GET]* /boards/{boardId}/comments
+댓글 목록 조회 (`Pagination`)
+
+===== Request Query Parameters
+include::{snippets}/get-comments_success/request-parameters.adoc[]
+
+===== Request Sample
+include::{snippets}/get-comments_success/http-request.adoc[]
+
+===== Response Body Fields
+include::{snippets}/get-comments_success/response-fields.adoc[]
+
+===== Response Sample
+include::{snippets}/get-comments_success/http-response.adoc[]
+
+
+
+==== *[POST]* /boards/{boardId}/comments
+댓글 생성
+
+===== Request Body Fields
+include::{snippets}/create-comment_success/request-fields.adoc[]
+
+===== Request Sample
+include::{snippets}/create-comment_success/http-request.adoc[]
+
+===== Response Body Fields
+include::{snippets}/create-comment_success/response-fields.adoc[]
+
+===== Response Sample
+include::{snippets}/create-comment_success/http-response.adoc[]
+
+
+
+==== *[PUT]* /boards/{boardId}/comments/{commentId}
+댓글 수정
+
+===== Request Path Variables
+include::{snippets}/update-comment_success/path-parameters.adoc[]
+
+===== Request Body Fields
+include::{snippets}/update-comment_success/request-fields.adoc[]
+
+===== Request Sample
+include::{snippets}/update-comment_success/http-request.adoc[]
+
+===== Response Body Fields
+include::{snippets}/update-comment_success/response-fields.adoc[]
+
+===== Response Sample
+include::{snippets}/update-comment_success/http-response.adoc[]
+
+
+
+==== *[DELETE]* /boards/{boardId}/comments/{commentId}
+댓글 삭제
+
+===== Request Path Variables
+include::{snippets}/delete-comment_success/path-parameters.adoc[]
+
+===== Request Sample
+include::{snippets}/delete-comment_success/http-request.adoc[]
+
+===== Response Body Fields
+include::{snippets}/delete-comment_success/response-fields.adoc[]
+
+===== Response Sample
+include::{snippets}/delete-comment_success/http-response.adoc[]

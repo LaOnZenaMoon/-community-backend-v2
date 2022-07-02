@@ -31,3 +31,5 @@
 == REST API
 
 include::{adocResourcesDir}/boards.adoc[]
+
+include::{adocResourcesDir}/comments.adoc[]
