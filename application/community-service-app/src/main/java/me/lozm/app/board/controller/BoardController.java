@@ -54,9 +54,10 @@ public class BoardController {
         return CommonResponseDto.success(responseDto);
     }
 
-    @PutMapping
-    public CommonResponseDto<BoardDetailDto.Response> updateBoard(@RequestBody @Validated BoardUpdateDto.Request requestDto) {
-        BoardUpdateVo.Request boardUpdateVo = boardMapper.toUpdateVo(requestDto);
+    @PutMapping("{boardId}")
+    public CommonResponseDto<BoardDetailDto.Response> updateBoard(@RequestBody @Validated BoardUpdateDto.Request requestDto,
+                                                                  @PathVariable("boardId") Long boardId) {
+        BoardUpdateVo.Request boardUpdateVo = boardMapper.toUpdateVo(boardId, requestDto);
         BoardDetailVo.Response boardDetailVo = boardService.updateBoard(boardUpdateVo);
         BoardDetailDto.Response responseDto = boardMapper.toDetailDto(boardDetailVo);
         return CommonResponseDto.success(responseDto);

@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
-import static me.lozm.app.board.BoardTestUtils.createBoard;
+import static me.lozm.app.board.TestUtils.createBoard;
 import static me.lozm.global.documentation.DocumentationUtils.PREFIX_DATA;
 import static me.lozm.global.documentation.DocumentationUtils.PREFIX_PAGE_DATA;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,7 +46,7 @@ class BoardControllerTest extends BaseDocumentationTest {
     void getBoards_success() throws Exception {
         // Given
         for (int i = 0; i < 77; i++) {
-            createBoard(boardService);
+            createBoard(BoardType.NEWS, ContentType.GENERAL, boardService);
         }
 
         // When
@@ -70,7 +70,7 @@ class BoardControllerTest extends BaseDocumentationTest {
     @Test
     void getBoardDetail_success() throws Exception {
         // Given
-        BoardDetailVo.Response boardDetailVo = createBoard(boardService);
+        BoardDetailVo.Response boardDetailVo = createBoard(BoardType.NEWS, ContentType.GENERAL, boardService);
         final Long boardId = boardDetailVo.getBoardId();
         final Long viewCount = boardDetailVo.getViewCount();
 
@@ -147,7 +147,7 @@ class BoardControllerTest extends BaseDocumentationTest {
     @Test
     void updateBoard_success() throws Exception {
         // Given
-        BoardDetailVo.Response boardDetailVo = createBoard(boardService);
+        BoardDetailVo.Response boardDetailVo = createBoard(BoardType.NEWS, ContentType.GENERAL, boardService);
 
         final Long boardId = boardDetailVo.getBoardId();
         final BoardType boardType = BoardType.NEWS;
@@ -156,7 +156,6 @@ class BoardControllerTest extends BaseDocumentationTest {
         final String content = boardDetailVo.getContent() + " updated";
 
         final String requestBody = "{\n" +
-                "  \"boardId\": " + boardId + ",\n" +
                 "  \"boardType\": \"" + boardType + "\",\n" +
                 "  \"contentType\": \"" + contentType + "\",\n" +
                 "  \"title\": \"" + title + "\",\n" +
@@ -165,7 +164,7 @@ class BoardControllerTest extends BaseDocumentationTest {
 
         // When
         ResultActions resultActions = mockMvc.perform(
-                RestDocumentationRequestBuilders.put("/boards")
+                RestDocumentationRequestBuilders.put("/boards/{boardId}", boardId)
                         .header(HttpHeaders.AUTHORIZATION, DocumentationUtils.getAccessToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody)
@@ -176,7 +175,6 @@ class BoardControllerTest extends BaseDocumentationTest {
                 .andExpect(status().is2xxSuccessful())
                 .andDo(this.documentationHandler.document(
                         requestFields(
-                                fieldWithPath("boardId").type(JsonFieldType.NUMBER).description("게시글 ID"),
                                 fieldWithPath("boardType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("게시글 유형", BoardType.class)).optional(),
                                 fieldWithPath("contentType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("게시글 내용 유형", ContentType.class)).optional(),
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("제목").optional(),
@@ -198,7 +196,7 @@ class BoardControllerTest extends BaseDocumentationTest {
     @Test
     void deleteBoard_success() throws Exception {
         // Given
-        BoardDetailVo.Response board = createBoard(boardService);
+        BoardDetailVo.Response board = createBoard(BoardType.NEWS, ContentType.GENERAL, boardService);
         final Long boardId = board.getBoardId();
 
         // When

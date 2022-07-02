@@ -276,12 +276,11 @@ client.global.set("BOARD_ID", response.body.data.boardId);
 %}
 
 ### 게시글 수정
-PUT {{service-app}}/boards
+PUT {{service-app}}/boards/{{BOARD_ID}}
 Authorization: Bearer {{ACCESS_TOKEN}}
 Content-Type: application/json
 
 {
-  "boardId": {{BOARD_ID}},
   "boardType": "ALL",
   "contentType": "GENERAL",
   "title": "첫번째 게시글",

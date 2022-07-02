@@ -3,6 +3,8 @@ package me.lozm.app.board.service;
 import me.lozm.domain.board.entity.Board;
 import me.lozm.domain.board.service.BoardHelperService;
 import me.lozm.domain.board.vo.BoardDetailVo;
+import me.lozm.global.code.BoardType;
+import me.lozm.global.code.ContentType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static me.lozm.app.board.BoardTestUtils.createBoard;
+import static me.lozm.app.board.TestUtils.createBoard;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -32,7 +34,7 @@ class BoardServiceImplTest {
     @Test
     void getBoardDetail_addViewCount_success() throws InterruptedException {
         // Given
-        BoardDetailVo.Response boardDetailVo = createBoard(boardService);
+        BoardDetailVo.Response boardDetailVo = createBoard(BoardType.NEWS, ContentType.GENERAL, boardService);
         final int viewCount = 22;
 
         final AtomicInteger successCount = new AtomicInteger();

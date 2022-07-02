@@ -28,5 +28,9 @@ public interface BoardMapper {
 
     BoardDetailDto.Response toDetailDto(BoardDetailVo.Response boardDetailVo);
 
-    BoardUpdateVo.Request toUpdateVo(BoardUpdateDto.Request requestDto);
+    @Mapping(source = "requestDto.boardType", target = "boardType")
+    @Mapping(source = "requestDto.contentType", target = "contentType")
+    @Mapping(source = "requestDto.title", target = "title")
+    @Mapping(source = "requestDto.content", target = "content")
+    BoardUpdateVo.Request toUpdateVo(Long boardId, BoardUpdateDto.Request requestDto);
 }
