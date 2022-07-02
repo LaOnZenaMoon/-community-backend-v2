@@ -5,10 +5,12 @@ import me.lozm.app.board.service.CommentService;
 import me.lozm.domain.board.dto.CommentCreateDto;
 import me.lozm.domain.board.dto.CommentDetailDto;
 import me.lozm.domain.board.dto.CommentPageDto;
+import me.lozm.domain.board.dto.CommentUpdateDto;
 import me.lozm.domain.board.mapper.CommentMapper;
 import me.lozm.domain.board.vo.CommentCreateVo;
 import me.lozm.domain.board.vo.CommentDetailVo;
 import me.lozm.domain.board.vo.CommentPageVo;
+import me.lozm.domain.board.vo.CommentUpdateVo;
 import me.lozm.global.model.CommonResponseDto;
 import me.lozm.global.model.dto.CommonPageResponseDto;
 import me.lozm.global.model.dto.PageQueryParameters;
@@ -44,6 +46,17 @@ public class CommentController {
 
         CommentCreateVo.Request commentCreateVo = commentMapper.toCreateVo(boardId, requestDto);
         CommentDetailVo.Response commentDetailVo = commentService.createComment(commentCreateVo);
+        CommentDetailDto.Response responseDto = commentMapper.toDetailDto(commentDetailVo);
+        return CommonResponseDto.success(responseDto);
+    }
+
+    @PutMapping("boards/{boardId}/comments/{commentId}")
+    public CommonResponseDto<CommentDetailDto.Response> updateComment(@RequestBody @Validated CommentUpdateDto.Request requestDto,
+                                                                      @PathVariable("boardId") Long boardId,
+                                                                      @PathVariable("commentId") Long commentId) {
+
+        CommentUpdateVo.Request commentUpdateVo = commentMapper.toUpdateVo(boardId, commentId, requestDto);
+        CommentDetailVo.Response commentDetailVo = commentService.updateComment(commentUpdateVo);
         CommentDetailDto.Response responseDto = commentMapper.toDetailDto(commentDetailVo);
         return CommonResponseDto.success(responseDto);
     }

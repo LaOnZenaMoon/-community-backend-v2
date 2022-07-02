@@ -2,8 +2,12 @@ package me.lozm.app.board.controller;
 
 import com.github.javafaker.Faker;
 import me.lozm.app.board.service.BoardService;
+import me.lozm.app.board.service.CommentService;
 import me.lozm.domain.board.vo.BoardDetailVo;
+import me.lozm.domain.board.vo.CommentDetailVo;
+import me.lozm.global.code.BoardType;
 import me.lozm.global.code.CommentType;
+import me.lozm.global.code.ContentType;
 import me.lozm.global.documentation.BaseDocumentationTest;
 import me.lozm.global.documentation.DocumentationUtils;
 import org.junit.jupiter.api.DisplayName;
@@ -18,10 +22,13 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
-import static me.lozm.app.board.BoardTestUtils.createBoard;
+import static me.lozm.app.board.TestUtils.createBoard;
+import static me.lozm.app.board.TestUtils.createComment;
 import static me.lozm.global.documentation.DocumentationUtils.PREFIX_DATA;
 import static me.lozm.global.documentation.DocumentationUtils.PREFIX_PAGE_DATA;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -30,12 +37,18 @@ class CommentControllerTest extends BaseDocumentationTest {
     @Autowired
     private BoardService boardService;
 
+    @Autowired
+    private CommentService commentService;
+
 
     @DisplayName("댓글 목록 조회(페이징) 성공")
     @Test
     void getComments_success() throws Exception {
         // Given
-        BoardDetailVo.Response boardDetailVo = createBoard(boardService);
+        BoardDetailVo.Response boardDetailVo = createBoard(BoardType.NEWS, ContentType.GENERAL, boardService);
+        for (int i = 0; i < 77; i++) {
+            createComment(boardDetailVo.getBoardId(), CommentType.GENERAL, commentService);
+        }
 
         // When
         ResultActions resultActions = mockMvc.perform(
@@ -47,6 +60,7 @@ class CommentControllerTest extends BaseDocumentationTest {
         resultActions.andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andDo(this.documentationHandler.document(
+                        pathParameters(parameterWithName("boardId").description("게시글 ID")),
                         DocumentationUtils.getPageParameters(),
                         responseFields(DocumentationUtils.getSuccessDefaultResponse())
                                 .andWithPrefix(PREFIX_DATA, DocumentationUtils.getPageFieldDescriptor())
@@ -58,7 +72,7 @@ class CommentControllerTest extends BaseDocumentationTest {
     @Test
     void createComment_success() throws Exception {
         // Given
-        BoardDetailVo.Response boardDetailVo = createBoard(boardService);
+        BoardDetailVo.Response boardDetailVo = createBoard(BoardType.NEWS, ContentType.GENERAL, boardService);
 
         final Faker faker = new Faker();
 
@@ -82,6 +96,49 @@ class CommentControllerTest extends BaseDocumentationTest {
         resultActions.andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andDo(this.documentationHandler.document(
+                        pathParameters(parameterWithName("boardId").description("게시글 ID")),
+                        requestFields(
+                                fieldWithPath("commentType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("댓글 유형", CommentType.class)),
+                                fieldWithPath("content").type(JsonFieldType.STRING).description("내용")
+                        ),
+                        responseFields(DocumentationUtils.getSuccessDefaultResponse())
+                                .andWithPrefix(PREFIX_DATA, getCommentDetailResponseDto())
+                ));
+    }
+
+    @DisplayName("댓글 수정 성공")
+    @Test
+    void updateComment_success() throws Exception {
+        // Given
+        BoardDetailVo.Response boardDetailVo = createBoard(BoardType.NEWS, ContentType.GENERAL, boardService);
+        CommentDetailVo.Response commentDetailVo = createComment(boardDetailVo.getBoardId(), CommentType.GENERAL, commentService);
+
+        final Faker faker = new Faker();
+
+        final CommentType commentType = CommentType.NOTICE;
+        final String content = faker.lorem().sentence(10);
+
+        final String requestBody = "{\n" +
+                "  \"commentType\": \"" + commentType + "\",\n" +
+                "  \"content\": \"" + content + "\"\n" +
+                "}";
+
+        // When
+        ResultActions resultActions = mockMvc.perform(
+                RestDocumentationRequestBuilders.put("/boards/{boardId}/comments/{commentId}", boardDetailVo.getBoardId(), commentDetailVo.getCommentId())
+                        .header(HttpHeaders.AUTHORIZATION, DocumentationUtils.getAccessToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody)
+        );
+
+        // Then
+        resultActions.andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andDo(this.documentationHandler.document(
+                        pathParameters(
+                                parameterWithName("boardId").description("게시글 ID"),
+                                parameterWithName("commentId").description("댓글 ID")
+                        ),
                         requestFields(
                                 fieldWithPath("commentType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("댓글 유형", CommentType.class)),
                                 fieldWithPath("content").type(JsonFieldType.STRING).description("내용")

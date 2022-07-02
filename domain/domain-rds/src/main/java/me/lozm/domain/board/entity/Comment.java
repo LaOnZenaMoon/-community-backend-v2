@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.lozm.domain.board.vo.CommentCreateVo;
+import me.lozm.domain.board.vo.CommentUpdateVo;
 import me.lozm.global.code.CommentType;
 import me.lozm.global.code.converter.CommentTypeConverter;
 import me.lozm.global.model.entity.BaseEntity;
@@ -14,6 +15,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+
+import static org.apache.commons.lang3.ObjectUtils.isNotEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 
 @Getter
@@ -59,6 +63,16 @@ public class Comment extends BaseEntity {
         comment.commentType = commentCreateVo.getCommentType();
         comment.content = commentCreateVo.getContent();
         return comment;
+    }
+
+    public void update(CommentUpdateVo.Request commentUpdateVo) {
+        if (isNotEmpty(commentUpdateVo.getCommentType())) {
+            this.commentType = commentUpdateVo.getCommentType();
+        }
+
+        if (isNotBlank(commentUpdateVo.getContent())) {
+            this.content = commentUpdateVo.getContent();
+        }
     }
 
 }
