@@ -12,4 +12,6 @@ public interface CommentService {
     CommentDetailVo.Response createComment(CommentCreateVo.Request commentCreateVo);
 
     CommentDetailVo.Response updateComment(CommentUpdateVo.Request commentUpdateVo);
+
+    void deleteComment(Long boardId, Long commentId);
 }

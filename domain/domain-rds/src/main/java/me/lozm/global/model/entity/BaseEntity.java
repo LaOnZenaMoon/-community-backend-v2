@@ -25,4 +25,9 @@ public abstract class BaseEntity extends BaseDateTimeEntity {
     @Column(name = "IS_USE")
     protected Boolean isUse;
 
+
+    public void updateIsUse(boolean isUse) {
+        this.isUse = isUse;
+    }
+
 }

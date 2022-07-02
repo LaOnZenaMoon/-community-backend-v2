@@ -61,4 +61,10 @@ public class CommentController {
         return CommonResponseDto.success(responseDto);
     }
 
+    @DeleteMapping("boards/{boardId}/comments/{commentId}")
+    public CommonResponseDto deleteComment(@PathVariable("boardId") Long boardId, @PathVariable("commentId") Long commentId) {
+        commentService.deleteComment(boardId, commentId);
+        return CommonResponseDto.success();
+    }
+
 }

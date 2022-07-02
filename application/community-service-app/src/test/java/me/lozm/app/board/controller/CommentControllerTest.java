@@ -148,6 +148,31 @@ class CommentControllerTest extends BaseDocumentationTest {
                 ));
     }
 
+    @DisplayName("댓글 삭제 성공")
+    @Test
+    void deleteComment_success() throws Exception {
+        // Given
+        BoardDetailVo.Response boardDetailVo = createBoard(BoardType.NEWS, ContentType.GENERAL, boardService);
+        CommentDetailVo.Response commentDetailVo = createComment(boardDetailVo.getBoardId(), CommentType.GENERAL, commentService);
+
+        // When
+        ResultActions resultActions = mockMvc.perform(
+                RestDocumentationRequestBuilders.delete("/boards/{boardId}/comments/{commentId}", boardDetailVo.getBoardId(), commentDetailVo.getCommentId())
+                        .header(HttpHeaders.AUTHORIZATION, DocumentationUtils.getAccessToken())
+        );
+
+        // Then
+        resultActions.andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andDo(this.documentationHandler.document(
+                        pathParameters(
+                                parameterWithName("boardId").description("게시글 ID"),
+                                parameterWithName("commentId").description("댓글 ID")
+                        ),
+                        responseFields(DocumentationUtils.getSuccessDefaultResponse())
+                ));
+    }
+
     private List<FieldDescriptor> getCommentDetailResponseDto() {
         return List.of(
                 subsectionWithPath("boardId").type(JsonFieldType.NUMBER).description("게시글 ID"),

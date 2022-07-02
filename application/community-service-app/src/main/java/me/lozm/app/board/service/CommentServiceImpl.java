@@ -48,4 +48,12 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.toDetailVo(comment);
     }
 
+    @Override
+    @Transactional
+    public void deleteComment(Long boardId, Long commentId) {
+        boardHelperService.getBoard(boardId);
+        Comment comment = commentHelperService.getComment(commentId);
+        comment.updateIsUse(false);
+    }
+
 }
