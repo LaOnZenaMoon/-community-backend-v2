@@ -3,6 +3,8 @@ package me.lozm.app.board.controller;
 import com.github.javafaker.Faker;
 import me.lozm.app.board.service.BoardService;
 import me.lozm.app.board.service.CommentService;
+import me.lozm.domain.board.entity.Comment;
+import me.lozm.domain.board.service.CommentHelperService;
 import me.lozm.domain.board.vo.BoardDetailVo;
 import me.lozm.domain.board.vo.CommentDetailVo;
 import me.lozm.global.code.BoardType;
@@ -26,6 +28,8 @@ import static me.lozm.app.board.TestUtils.createBoard;
 import static me.lozm.app.board.TestUtils.createComment;
 import static me.lozm.global.documentation.DocumentationUtils.PREFIX_DATA;
 import static me.lozm.global.documentation.DocumentationUtils.PREFIX_PAGE_DATA;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -39,6 +43,9 @@ class CommentControllerTest extends BaseDocumentationTest {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private CommentHelperService commentHelperService;
 
 
     @DisplayName("댓글 목록 조회(페이징) 성공")
@@ -113,6 +120,8 @@ class CommentControllerTest extends BaseDocumentationTest {
         BoardDetailVo.Response boardDetailVo = createBoard(BoardType.NEWS, ContentType.GENERAL, boardService);
         CommentDetailVo.Response commentDetailVo = createComment(boardDetailVo.getBoardId(), CommentType.GENERAL, commentService);
 
+        final Long commentId = commentDetailVo.getCommentId();
+
         final Faker faker = new Faker();
 
         final CommentType commentType = CommentType.NOTICE;
@@ -125,7 +134,7 @@ class CommentControllerTest extends BaseDocumentationTest {
 
         // When
         ResultActions resultActions = mockMvc.perform(
-                RestDocumentationRequestBuilders.put("/boards/{boardId}/comments/{commentId}", boardDetailVo.getBoardId(), commentDetailVo.getCommentId())
+                RestDocumentationRequestBuilders.put("/boards/{boardId}/comments/{commentId}", boardDetailVo.getBoardId(), commentId)
                         .header(HttpHeaders.AUTHORIZATION, DocumentationUtils.getAccessToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody)
@@ -146,6 +155,10 @@ class CommentControllerTest extends BaseDocumentationTest {
                         responseFields(DocumentationUtils.getSuccessDefaultResponse())
                                 .andWithPrefix(PREFIX_DATA, getCommentDetailResponseDto())
                 ));
+
+        Comment comment = commentHelperService.getComment(commentId);
+        assertEquals(commentType, comment.getCommentType());
+        assertEquals(content, comment.getContent());
     }
 
     @DisplayName("댓글 삭제 성공")
@@ -155,9 +168,11 @@ class CommentControllerTest extends BaseDocumentationTest {
         BoardDetailVo.Response boardDetailVo = createBoard(BoardType.NEWS, ContentType.GENERAL, boardService);
         CommentDetailVo.Response commentDetailVo = createComment(boardDetailVo.getBoardId(), CommentType.GENERAL, commentService);
 
+        final Long commentId = commentDetailVo.getCommentId();
+
         // When
         ResultActions resultActions = mockMvc.perform(
-                RestDocumentationRequestBuilders.delete("/boards/{boardId}/comments/{commentId}", boardDetailVo.getBoardId(), commentDetailVo.getCommentId())
+                RestDocumentationRequestBuilders.delete("/boards/{boardId}/comments/{commentId}", boardDetailVo.getBoardId(), commentId)
                         .header(HttpHeaders.AUTHORIZATION, DocumentationUtils.getAccessToken())
         );
 
@@ -171,6 +186,8 @@ class CommentControllerTest extends BaseDocumentationTest {
                         ),
                         responseFields(DocumentationUtils.getSuccessDefaultResponse())
                 ));
+
+        assertThrows(IllegalArgumentException.class, () -> commentHelperService.getComment(commentId));
     }
 
     private List<FieldDescriptor> getCommentDetailResponseDto() {
