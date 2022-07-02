@@ -174,6 +174,7 @@ class BoardControllerTest extends BaseDocumentationTest {
         resultActions.andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andDo(this.documentationHandler.document(
+                        pathParameters(parameterWithName("boardId").description("게시글 ID")),
                         requestFields(
                                 fieldWithPath("boardType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("게시글 유형", BoardType.class)).optional(),
                                 fieldWithPath("contentType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("게시글 내용 유형", ContentType.class)).optional(),
