@@ -2,6 +2,7 @@ package me.lozm.app.board.service;
 
 import lombok.RequiredArgsConstructor;
 import me.lozm.domain.board.entity.Board;
+import me.lozm.domain.board.entity.Comment;
 import me.lozm.domain.board.mapper.BoardMapper;
 import me.lozm.domain.board.repository.BoardRepository;
 import me.lozm.domain.board.service.BoardHelperService;
@@ -56,6 +57,9 @@ public class BoardServiceImpl implements BoardService {
     public void deleteBoard(Long boardId) {
         Board board = boardHelperService.getBoardUsingLock(boardId);
         board.updateIsUse(false);
+        for (Comment comment : board.getComments()) {
+            comment.updateIsUse(false);
+        }
     }
 
 }
