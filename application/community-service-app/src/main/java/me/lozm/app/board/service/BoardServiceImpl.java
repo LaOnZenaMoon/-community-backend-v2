@@ -46,7 +46,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     public BoardDetailVo.Response updateBoard(BoardUpdateVo.Request boardUpdateVo) {
-        Board board = boardHelperService.getBoard(boardUpdateVo.getBoardId());
+        Board board = boardHelperService.getBoardUsingLock(boardUpdateVo.getBoardId());
         board.update(boardUpdateVo);
         return boardMapper.toDetailVo(board);
     }
@@ -54,7 +54,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     public void deleteBoard(Long boardId) {
-        Board board = boardHelperService.getBoard(boardId);
+        Board board = boardHelperService.getBoardUsingLock(boardId);
         board.updateIsUse(false);
     }
 
