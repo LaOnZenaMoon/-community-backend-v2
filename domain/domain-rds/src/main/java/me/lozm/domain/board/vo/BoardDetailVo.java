@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.lozm.global.code.BoardType;
 import me.lozm.global.code.ContentType;
-import me.lozm.global.model.HierarchyAble;
+import me.lozm.global.model.HierarchyResponseAble;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BoardDetailVo {
@@ -15,7 +15,7 @@ public class BoardDetailVo {
     @AllArgsConstructor
     public static class Response {
         private final Long boardId;
-        private final HierarchyAble hierarchicalBoard;
+        private final HierarchyResponseAble hierarchicalBoard;
         private final BoardType boardType;
         private final ContentType contentType;
         private final Long viewCount;

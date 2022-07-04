@@ -22,6 +22,7 @@ public interface CommentMapper {
     CommentPageDto.Response toPageDto(CommentPageVo.Element element);
 
 
+    @Mapping(source = "requestDto.hierarchy", target = "hierarchy")
     @Mapping(source = "requestDto.commentType", target = "commentType")
     @Mapping(source = "requestDto.content", target = "content")
     CommentCreateVo.Request toCreateVo(Long boardId, CommentCreateDto.Request requestDto);
@@ -30,7 +31,6 @@ public interface CommentMapper {
 
     @Mapping(source = "board.id", target = "boardId")
     @Mapping(source = "id", target = "commentId")
-    @Mapping(source = "hierarchicalComment", target = "hierarchy")
     CommentDetailVo.Response toDetailVo(Comment comment);
 
     @Mapping(source = "requestDto.commentType", target = "commentType")

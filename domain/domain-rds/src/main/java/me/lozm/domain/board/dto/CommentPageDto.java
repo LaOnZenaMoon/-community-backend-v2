@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.lozm.global.code.CommentType;
-import me.lozm.global.model.HierarchyAble;
+import me.lozm.global.model.HierarchyResponseAble;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommentPageDto {
@@ -16,7 +16,7 @@ public class CommentPageDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class Response {
         private final Long commentId;
-        private final HierarchyAble hierarchy;
+        private final HierarchyResponseAble hierarchy;
         private final CommentType commentType;
         private final String content;
     }

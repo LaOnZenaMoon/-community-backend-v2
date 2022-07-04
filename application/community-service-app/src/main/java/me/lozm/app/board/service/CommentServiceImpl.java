@@ -11,6 +11,9 @@ import me.lozm.domain.board.vo.CommentCreateVo;
 import me.lozm.domain.board.vo.CommentDetailVo;
 import me.lozm.domain.board.vo.CommentPageVo;
 import me.lozm.domain.board.vo.CommentUpdateVo;
+import me.lozm.global.code.HierarchyType;
+import me.lozm.utils.exception.BadRequestException;
+import me.lozm.utils.exception.CustomExceptionType;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +38,33 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     public CommentDetailVo.Response createComment(CommentCreateVo.Request commentCreateVo) {
         Board board = boardHelperService.getBoard(commentCreateVo.getBoardId());
+
+        final HierarchyType hierarchyType = commentCreateVo.getHierarchy().getHierarchyType();
+
         Comment comment = commentRepository.save(Comment.of(board, commentCreateVo));
+        if (hierarchyType == HierarchyType.ORIGIN) {
+            comment.getHierarchy().update(comment.getId());
+            return commentMapper.toDetailVo(comment);
+        }
+
+        final Long parentCommentId = commentCreateVo.getHierarchy().getParentId();
+        Comment parentComment = commentHelperService.getComment(parentCommentId);
+
+        if (hierarchyType == HierarchyType.REPLY_FOR_ORIGIN) {
+            Integer maxGroupOrder = commentRepository.findMaxGroupOrder(parentCommentId, parentCommentId);
+            comment.getHierarchy().update(
+                    parentCommentId,
+                    parentCommentId,
+                    parentComment.getHierarchy().getGroupLayer() + 1,
+                    maxGroupOrder + 1
+            );
+
+        } else if (hierarchyType == HierarchyType.REPLY_FOR_REPLY) {
+            throw new BadRequestException(CustomExceptionType.INVALID_HIERARCHY_TYPE);
+        } else {
+            throw new BadRequestException(CustomExceptionType.INVALID_HIERARCHY_TYPE);
+        }
+
         return commentMapper.toDetailVo(comment);
     }
 

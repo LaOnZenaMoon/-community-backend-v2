@@ -54,7 +54,7 @@ class CommentControllerTest extends BaseDocumentationTest {
         // Given
         BoardDetailVo.Response boardDetailVo = createBoard(BoardType.NEWS, ContentType.GENERAL, boardService);
         for (int i = 0; i < 77; i++) {
-            createComment(boardDetailVo.getBoardId(), CommentType.GENERAL, commentService);
+            createComment(boardDetailVo.getBoardId(), null, CommentType.GENERAL, commentService);
         }
 
         // When
@@ -118,7 +118,7 @@ class CommentControllerTest extends BaseDocumentationTest {
     void updateComment_success() throws Exception {
         // Given
         BoardDetailVo.Response boardDetailVo = createBoard(BoardType.NEWS, ContentType.GENERAL, boardService);
-        CommentDetailVo.Response commentDetailVo = createComment(boardDetailVo.getBoardId(), CommentType.GENERAL, commentService);
+        CommentDetailVo.Response commentDetailVo = createComment(boardDetailVo.getBoardId(), null, CommentType.GENERAL, commentService);
 
         final Long commentId = commentDetailVo.getCommentId();
 
@@ -166,7 +166,7 @@ class CommentControllerTest extends BaseDocumentationTest {
     void deleteComment_success() throws Exception {
         // Given
         BoardDetailVo.Response boardDetailVo = createBoard(BoardType.NEWS, ContentType.GENERAL, boardService);
-        CommentDetailVo.Response commentDetailVo = createComment(boardDetailVo.getBoardId(), CommentType.GENERAL, commentService);
+        CommentDetailVo.Response commentDetailVo = createComment(boardDetailVo.getBoardId(), null, CommentType.GENERAL, commentService);
 
         final Long commentId = commentDetailVo.getCommentId();
 

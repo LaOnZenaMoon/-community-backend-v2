@@ -95,7 +95,7 @@ class BoardServiceImplTest {
         List<CommentDetailVo.Response> createdCommentList = new ArrayList<>();
         final int commentSize = 33;
         for (int i = 0; i < commentSize; i++) {
-            createdCommentList.add(createComment(boardDetailVo.getBoardId(), CommentType.GENERAL, commentService));
+            createdCommentList.add(createComment(boardDetailVo.getBoardId(), null, CommentType.GENERAL, commentService));
         }
 
         // When

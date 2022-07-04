@@ -13,4 +13,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long>, Comment
     @Query("SELECT c FROM Comment c WHERE c.id = :commentId")
     Optional<Comment> findByIdUsingLock(Long commentId);
 
+    @Query("SELECT MAX(c.hierarchy.groupOrder) FROM Comment c " +
+            "WHERE c.hierarchy.commonParentId = :commonParentId " +
+            "AND c.hierarchy.commonParentId = :parentId ")
+    Integer findMaxGroupOrder(Long commonParentId, Long parentId);
 }

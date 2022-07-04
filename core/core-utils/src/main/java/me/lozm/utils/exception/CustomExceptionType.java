@@ -18,6 +18,9 @@ public enum CustomExceptionType {
     AUTH_INTERNAL_SERVER_ERROR("SECURITY_005", "인증 진행 시 오류가 발생되었습니다."),
     INVALID_GRANT_TYPE("SECURITY_006", "유효하지 않은 Grant 타입입니다."),
     INVALID_SCOPE("SECURITY_006", "유효하지 않은 Scope 입니다."),
+
+    // Boards and comments
+    INVALID_HIERARCHY_TYPE("HIERARCHY_001", "계층 유형이 잘못되었습니다."),
     ;
 
     private final String code;

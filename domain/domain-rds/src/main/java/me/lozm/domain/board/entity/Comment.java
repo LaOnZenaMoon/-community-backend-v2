@@ -42,7 +42,7 @@ public class Comment extends BaseEntity {
             @AttributeOverride(name = "commonParentId", column = @Column(name = "COMMON_PARENT_COMMENT_ID")),
             @AttributeOverride(name = "parentId", column = @Column(name = "PARENT_COMMENT_ID"))
     })
-    private HierarchicalEntity hierarchicalComment;
+    private HierarchicalEntity hierarchy = new HierarchicalEntity();
 
     @Column(name = "COMMENT_TYPE")
     @Convert(converter = CommentTypeConverter.class)
