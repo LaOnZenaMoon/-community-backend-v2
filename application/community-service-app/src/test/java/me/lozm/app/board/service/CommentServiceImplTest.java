@@ -1,5 +1,7 @@
 package me.lozm.app.board.service;
 
+import me.lozm.domain.board.repository.BoardRepository;
+import me.lozm.domain.board.repository.CommentRepository;
 import me.lozm.domain.board.vo.BoardDetailVo;
 import me.lozm.domain.board.vo.CommentDetailVo;
 import me.lozm.global.code.BoardType;
@@ -8,6 +10,7 @@ import me.lozm.global.code.ContentType;
 import me.lozm.global.code.HierarchyType;
 import me.lozm.global.model.HierarchyResponseAble;
 import me.lozm.global.model.vo.CommonHierarchyVo;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +24,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class CommentServiceImplTest {
 
     @Autowired
+    private BoardRepository boardRepository;
+
+    @Autowired
     private BoardService boardService;
 
     @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
     private CommentService commentService;
+
+    @AfterEach
+    void afterEach() {
+        boardRepository.deleteAll();
+        commentRepository.deleteAll();
+    }
 
     @DisplayName("댓글 생성 성공 > 원글")
     @Test
@@ -36,13 +51,7 @@ class CommentServiceImplTest {
         CommentDetailVo.Response commentDetailVo = createComment(boardDetailVo.getBoardId(), null, CommentType.GENERAL, commentService);
 
         // Then
-        final Long originCommentId = commentDetailVo.getCommentId();
-        final HierarchyResponseAble originCommentHierarchy = commentDetailVo.getHierarchy();
-
-        assertEquals(originCommentId, originCommentHierarchy.getCommonParentId());
-        assertEquals(originCommentId, originCommentHierarchy.getParentId());
-        assertEquals(0, originCommentHierarchy.getGroupLayer());
-        assertEquals(0, originCommentHierarchy.getGroupOrder());
+        checkHierarchy(commentDetailVo.getHierarchy(), commentDetailVo.getCommentId(), commentDetailVo.getCommentId(), 0, 0);
     }
 
     @DisplayName("댓글 생성 성공 > 원글에 대한 댓글")
@@ -60,34 +69,63 @@ class CommentServiceImplTest {
         CommentDetailVo.Response replyCommentDetailVo3 = createComment(boardDetailVo.getBoardId(), commonHierarchyRequestVo, CommentType.GENERAL, commentService);
 
         // Then
-        final Long originCommentId = commentDetailVo.getCommentId();
-        final HierarchyResponseAble originCommentHierarchy = commentDetailVo.getHierarchy();
+        checkHierarchy(commentDetailVo.getHierarchy(), commentDetailVo.getCommentId(), commentDetailVo.getCommentId(), 0, 0);
+        checkHierarchy(replyCommentDetailVo1.getHierarchy(), commentDetailVo.getCommentId(), commentDetailVo.getCommentId(), 1, 1);
+        checkHierarchy(replyCommentDetailVo2.getHierarchy(), commentDetailVo.getCommentId(), commentDetailVo.getCommentId(), 1, 2);
+        checkHierarchy(replyCommentDetailVo3.getHierarchy(), commentDetailVo.getCommentId(), commentDetailVo.getCommentId(), 1, 3);
+    }
 
-        assertEquals(originCommentId, originCommentHierarchy.getCommonParentId());
-        assertEquals(originCommentId, originCommentHierarchy.getParentId());
-        assertEquals(0, originCommentHierarchy.getGroupLayer());
-        assertEquals(0, originCommentHierarchy.getGroupOrder());
+    @DisplayName("댓글 생성 성공 > 댓글에 대한 댓글")
+    @Test
+    void createComment_hierarchy_reply_for_reply_success() {
+        // Given
+        BoardDetailVo.Response boardDetailVo = createBoard(BoardType.ALL, ContentType.GENERAL, boardService);
 
-        final HierarchyResponseAble replyCommentHierarchy1 = replyCommentDetailVo1.getHierarchy();
+        // commentId = 2
+        CommentDetailVo.Response commentDetailVo1 = createComment(boardDetailVo.getBoardId(), null, CommentType.GENERAL, commentService);
 
-        assertEquals(originCommentId, replyCommentHierarchy1.getCommonParentId());
-        assertEquals(originCommentId, replyCommentHierarchy1.getParentId());
-        assertEquals(1, replyCommentHierarchy1.getGroupLayer());
-        assertEquals(1, replyCommentHierarchy1.getGroupOrder());
+        // commentId = 3
+        CommentDetailVo.Response commentDetailVo2 = createComment(boardDetailVo.getBoardId(), null, CommentType.GENERAL, commentService);
 
-        final HierarchyResponseAble replyCommentHierarchy2 = replyCommentDetailVo2.getHierarchy();
+        // When
+        CommonHierarchyVo.Request commonHierarchyRequestVo1 = new CommonHierarchyVo.Request(HierarchyType.REPLY_FOR_ORIGIN, commentDetailVo1.getCommentId());
+        // commentId = 4
+        CommentDetailVo.Response replyCommentDetailVo1 = createComment(boardDetailVo.getBoardId(), commonHierarchyRequestVo1, CommentType.GENERAL, commentService);
+        CommonHierarchyVo.Request commonHierarchyRequestVo1_1 = new CommonHierarchyVo.Request(HierarchyType.REPLY_FOR_REPLY, replyCommentDetailVo1.getCommentId());
 
-        assertEquals(originCommentId, replyCommentHierarchy2.getCommonParentId());
-        assertEquals(originCommentId, replyCommentHierarchy2.getParentId());
-        assertEquals(1, replyCommentHierarchy2.getGroupLayer());
-        assertEquals(2, replyCommentHierarchy2.getGroupOrder());
+        // commentId = 5
+        CommentDetailVo.Response replyCommentDetailVo1_1 = createComment(boardDetailVo.getBoardId(), commonHierarchyRequestVo1_1, CommentType.GENERAL, commentService);
+        // commentId = 6
+        CommentDetailVo.Response replyCommentDetailVo1_2 = createComment(boardDetailVo.getBoardId(), commonHierarchyRequestVo1_1, CommentType.GENERAL, commentService);
+        // commentId = 7
+        CommentDetailVo.Response replyCommentDetailVo1_3 = createComment(boardDetailVo.getBoardId(), commonHierarchyRequestVo1_1, CommentType.GENERAL, commentService);
 
-        final HierarchyResponseAble replyCommentHierarchy3 = replyCommentDetailVo3.getHierarchy();
+        CommentDetailVo.Response replyCommentDetailVo2 = createComment(boardDetailVo.getBoardId(), commonHierarchyRequestVo1, CommentType.GENERAL, commentService);
+        CommentDetailVo.Response replyCommentDetailVo3 = createComment(boardDetailVo.getBoardId(), commonHierarchyRequestVo1, CommentType.GENERAL, commentService);
 
-        assertEquals(originCommentId, replyCommentHierarchy3.getCommonParentId());
-        assertEquals(originCommentId, replyCommentHierarchy3.getParentId());
-        assertEquals(1, replyCommentHierarchy3.getGroupLayer());
-        assertEquals(3, replyCommentHierarchy3.getGroupOrder());
+        CommonHierarchyVo.Request commonHierarchyRequestVo2 = new CommonHierarchyVo.Request(HierarchyType.REPLY_FOR_ORIGIN, commentDetailVo2.getCommentId());
+        CommentDetailVo.Response replyCommentDetailVo4 = createComment(boardDetailVo.getBoardId(), commonHierarchyRequestVo2, CommentType.GENERAL, commentService);
+        CommentDetailVo.Response replyCommentDetailVo5 = createComment(boardDetailVo.getBoardId(), commonHierarchyRequestVo2, CommentType.GENERAL, commentService);
+
+        // Then
+        checkHierarchy(commentDetailVo1.getHierarchy(), commentDetailVo1.getCommentId(), commentDetailVo1.getCommentId(), 0, 0);
+        checkHierarchy(replyCommentDetailVo1.getHierarchy(), commentDetailVo1.getCommentId(), commentDetailVo1.getCommentId(), 1, 1);
+        checkHierarchy(replyCommentDetailVo1_1.getHierarchy(), commentDetailVo1.getCommentId(), replyCommentDetailVo1.getCommentId(), 2, 2);
+        checkHierarchy(replyCommentDetailVo1_2.getHierarchy(), commentDetailVo1.getCommentId(), replyCommentDetailVo1.getCommentId(), 2, 3);
+        checkHierarchy(replyCommentDetailVo1_3.getHierarchy(), commentDetailVo1.getCommentId(), replyCommentDetailVo1.getCommentId(), 2, 4);
+        checkHierarchy(replyCommentDetailVo2.getHierarchy(), commentDetailVo1.getCommentId(), commentDetailVo1.getCommentId(), 1, 5);
+        checkHierarchy(replyCommentDetailVo3.getHierarchy(), commentDetailVo1.getCommentId(), commentDetailVo1.getCommentId(), 1, 6);
+
+        checkHierarchy(commentDetailVo2.getHierarchy(), commentDetailVo2.getCommentId(), commentDetailVo2.getCommentId(), 0, 0);
+        checkHierarchy(replyCommentDetailVo4.getHierarchy(), commentDetailVo2.getCommentId(), commentDetailVo2.getCommentId(), 1, 1);
+        checkHierarchy(replyCommentDetailVo5.getHierarchy(), commentDetailVo2.getCommentId(), commentDetailVo2.getCommentId(), 1, 2);
+    }
+
+    private void checkHierarchy(HierarchyResponseAble originCommentHierarchy, Long commonParentId, Long parentId, Integer groupLayer, Integer groupOrder) {
+        assertEquals(commonParentId, originCommentHierarchy.getCommonParentId());
+        assertEquals(parentId, originCommentHierarchy.getParentId());
+        assertEquals(groupLayer, originCommentHierarchy.getGroupLayer());
+        assertEquals(groupOrder, originCommentHierarchy.getGroupOrder());
     }
 
 }

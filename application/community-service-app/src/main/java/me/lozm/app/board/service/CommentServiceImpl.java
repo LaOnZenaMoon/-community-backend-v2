@@ -18,6 +18,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+
+import static java.lang.String.format;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -38,10 +43,9 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     public CommentDetailVo.Response createComment(CommentCreateVo.Request commentCreateVo) {
         Board board = boardHelperService.getBoard(commentCreateVo.getBoardId());
+        Comment comment = commentRepository.save(Comment.of(board, commentCreateVo));
 
         final HierarchyType hierarchyType = commentCreateVo.getHierarchy().getHierarchyType();
-
-        Comment comment = commentRepository.save(Comment.of(board, commentCreateVo));
         if (hierarchyType == HierarchyType.ORIGIN) {
             comment.getHierarchy().update(comment.getId());
             return commentMapper.toDetailVo(comment);
@@ -51,7 +55,8 @@ public class CommentServiceImpl implements CommentService {
         Comment parentComment = commentHelperService.getComment(parentCommentId);
 
         if (hierarchyType == HierarchyType.REPLY_FOR_ORIGIN) {
-            Integer maxGroupOrder = commentRepository.findMaxGroupOrder(parentCommentId, parentCommentId);
+            Integer maxGroupOrder = getMaxGroupOrderWhenReplyForOrigin(parentCommentId);
+
             comment.getHierarchy().update(
                     parentCommentId,
                     parentCommentId,
@@ -60,7 +65,17 @@ public class CommentServiceImpl implements CommentService {
             );
 
         } else if (hierarchyType == HierarchyType.REPLY_FOR_REPLY) {
-            throw new BadRequestException(CustomExceptionType.INVALID_HIERARCHY_TYPE);
+            Integer maxGroupOrder = getMaxGroupOrderWhenReplyForReply(parentComment);
+
+            comment.getHierarchy().update(
+                    parentComment.getHierarchy().getCommonParentId(),
+                    parentCommentId,
+                    parentComment.getHierarchy().getGroupLayer() + 1,
+                    maxGroupOrder + 1
+            );
+
+            increaseCommentsGroupOrderBehindCreatedComment(parentComment, maxGroupOrder);
+
         } else {
             throw new BadRequestException(CustomExceptionType.INVALID_HIERARCHY_TYPE);
         }
@@ -83,6 +98,38 @@ public class CommentServiceImpl implements CommentService {
         boardHelperService.getBoard(boardId);
         Comment comment = commentHelperService.getComment(commentId);
         comment.updateIsUse(false);
+    }
+
+    private Integer getMaxGroupOrderWhenReplyForOrigin(Long parentCommentId) {
+        return commentRepository.findMaxGroupOrder(parentCommentId)
+                .orElseThrow(() -> new IllegalStateException(format("groupOrder 처리에 오류가 발생하였습니다. parentCommentId: %d", parentCommentId)));
+    }
+
+    private void increaseCommentsGroupOrderBehindCreatedComment(Comment parentComment, Integer maxGroupOrder) {
+        List<Comment> commentList = commentRepository.findAllByHierarchy_CommonParentId(parentComment.getHierarchy().getCommonParentId());
+        for (Comment comment1 : commentList) {
+            if (comment1.getHierarchy().getGroupOrder() > maxGroupOrder + 1) {
+                comment1.getHierarchy().increaseGroupOrder();
+            }
+        }
+    }
+
+    private Integer getMaxGroupOrderWhenReplyForReply(Comment parentComment) {
+        final Long commonParentId = parentComment.getHierarchy().getCommonParentId();
+        final Long parentId = parentComment.getHierarchy().getParentId();
+
+        Optional<Integer> maxGroupOrderOptional1 = commentRepository.findMaxGroupOrder(commonParentId, parentComment.getId());
+        if (maxGroupOrderOptional1.isPresent()) {
+            return maxGroupOrderOptional1.get();
+        }
+
+        Optional<Integer> maxGroupOrderOptional2 = commentRepository.findMaxGroupOrder(commonParentId, parentId);
+        if (maxGroupOrderOptional2.isPresent()) {
+            return maxGroupOrderOptional2.get();
+        }
+
+        throw new IllegalStateException(format("댓글 groupOrder 처리에 오류가 발생하였습니다. commonParentId: %d, parentId: %d"
+                , commonParentId, parentId));
     }
 
 }

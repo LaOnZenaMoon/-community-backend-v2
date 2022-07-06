@@ -37,4 +37,8 @@ public class HierarchicalEntity implements HierarchyResponseAble {
         this.groupOrder = groupOrder;
     }
 
+    public void increaseGroupOrder() {
+        this.groupOrder += 1;
+    }
+
 }
