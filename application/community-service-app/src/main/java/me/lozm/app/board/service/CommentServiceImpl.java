@@ -48,50 +48,6 @@ public class CommentServiceImpl extends HierarchyService<Comment> implements Com
         return createEntity(commentCreateVo, saveEntityFunction);
     }
 
-    //    @Override
-//    @Transactional
-//    public CommentDetailVo.Response createComment(CommentCreateVo.Request commentCreateVo) {
-//        Board board = boardHelperService.getBoard(commentCreateVo.getBoardId());
-//        Comment comment = commentRepository.save(Comment.of(board, commentCreateVo));
-//
-//        final HierarchyType hierarchyType = commentCreateVo.getHierarchy().getHierarchyType();
-//        if (hierarchyType == HierarchyType.ORIGIN) {
-//            comment.getHierarchy().update(comment.getId());
-//            return commentMapper.toDetailVo(comment);
-//        }
-//
-//        final Long parentCommentId = commentCreateVo.getHierarchy().getParentId();
-//        Comment parentComment = commentHelperService.getComment(parentCommentId);
-//
-//        if (hierarchyType == HierarchyType.REPLY_FOR_ORIGIN) {
-//            Integer maxGroupOrder = getMaxGroupOrderWhenReplyForOrigin(parentCommentId);
-//
-//            comment.getHierarchy().update(
-//                    parentCommentId,
-//                    parentCommentId,
-//                    parentComment.getHierarchy().getGroupLayer() + 1,
-//                    maxGroupOrder + 1
-//            );
-//
-//        } else if (hierarchyType == HierarchyType.REPLY_FOR_REPLY) {
-//            Integer maxGroupOrder = getMaxGroupOrderWhenReplyForReply(parentComment);
-//
-//            comment.getHierarchy().update(
-//                    parentComment.getHierarchy().getCommonParentId(),
-//                    parentCommentId,
-//                    parentComment.getHierarchy().getGroupLayer() + 1,
-//                    maxGroupOrder + 1
-//            );
-//
-//            increaseCommentsGroupOrderBehindCreatedComment(parentComment, maxGroupOrder);
-//
-//        } else {
-//            throw new BadRequestException(CustomExceptionType.INVALID_HIERARCHY_TYPE);
-//        }
-//
-//        return commentMapper.toDetailVo(comment);
-//    }
-
     @Override
     @Transactional
     public CommentDetailVo.Response updateComment(CommentUpdateVo.Request commentUpdateVo) {
