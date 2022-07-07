@@ -10,6 +10,7 @@ import me.lozm.domain.board.vo.CommentDetailVo;
 import me.lozm.global.code.BoardType;
 import me.lozm.global.code.CommentType;
 import me.lozm.global.code.ContentType;
+import me.lozm.global.code.HierarchyType;
 import me.lozm.global.documentation.BaseDocumentationTest;
 import me.lozm.global.documentation.DocumentationUtils;
 import org.junit.jupiter.api.DisplayName;
@@ -105,6 +106,8 @@ class CommentControllerTest extends BaseDocumentationTest {
                 .andDo(this.documentationHandler.document(
                         pathParameters(parameterWithName("boardId").description("게시글 ID")),
                         requestFields(
+                                fieldWithPath("hierarchyType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("생성할 댓글 계층 유형", HierarchyType.class)).optional(),
+                                fieldWithPath("parentId").type(JsonFieldType.NUMBER).description("생성할 댓글에 대한 상위 댓글 ID").optional(),
                                 fieldWithPath("commentType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("댓글 유형", CommentType.class)),
                                 fieldWithPath("content").type(JsonFieldType.STRING).description("내용")
                         ),
