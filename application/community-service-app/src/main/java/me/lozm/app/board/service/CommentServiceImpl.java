@@ -11,22 +11,21 @@ import me.lozm.domain.board.vo.CommentCreateVo;
 import me.lozm.domain.board.vo.CommentDetailVo;
 import me.lozm.domain.board.vo.CommentPageVo;
 import me.lozm.domain.board.vo.CommentUpdateVo;
-import me.lozm.global.code.HierarchyType;
-import me.lozm.utils.exception.BadRequestException;
-import me.lozm.utils.exception.CustomExceptionType;
+import me.lozm.global.model.HierarchyRequestAble;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static java.lang.String.format;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class CommentServiceImpl implements CommentService {
+public class CommentServiceImpl extends HierarchyService<Comment> implements CommentService {
 
     private final CommentRepository commentRepository;
     private final CommentHelperService commentHelperService;
@@ -42,46 +41,56 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public CommentDetailVo.Response createComment(CommentCreateVo.Request commentCreateVo) {
-        Board board = boardHelperService.getBoard(commentCreateVo.getBoardId());
-        Comment comment = commentRepository.save(Comment.of(board, commentCreateVo));
-
-        final HierarchyType hierarchyType = commentCreateVo.getHierarchy().getHierarchyType();
-        if (hierarchyType == HierarchyType.ORIGIN) {
-            comment.getHierarchy().update(comment.getId());
-            return commentMapper.toDetailVo(comment);
-        }
-
-        final Long parentCommentId = commentCreateVo.getHierarchy().getParentId();
-        Comment parentComment = commentHelperService.getComment(parentCommentId);
-
-        if (hierarchyType == HierarchyType.REPLY_FOR_ORIGIN) {
-            Integer maxGroupOrder = getMaxGroupOrderWhenReplyForOrigin(parentCommentId);
-
-            comment.getHierarchy().update(
-                    parentCommentId,
-                    parentCommentId,
-                    parentComment.getHierarchy().getGroupLayer() + 1,
-                    maxGroupOrder + 1
-            );
-
-        } else if (hierarchyType == HierarchyType.REPLY_FOR_REPLY) {
-            Integer maxGroupOrder = getMaxGroupOrderWhenReplyForReply(parentComment);
-
-            comment.getHierarchy().update(
-                    parentComment.getHierarchy().getCommonParentId(),
-                    parentCommentId,
-                    parentComment.getHierarchy().getGroupLayer() + 1,
-                    maxGroupOrder + 1
-            );
-
-            increaseCommentsGroupOrderBehindCreatedComment(parentComment, maxGroupOrder);
-
-        } else {
-            throw new BadRequestException(CustomExceptionType.INVALID_HIERARCHY_TYPE);
-        }
-
-        return commentMapper.toDetailVo(comment);
+        Function<CommentCreateVo.Request, Comment> saveEntityFunction = request -> {
+            Board board = boardHelperService.getBoard(request.getBoardId());
+            return commentRepository.save(Comment.of(board, request));
+        };
+        return createEntity(commentCreateVo, saveEntityFunction);
     }
+
+    //    @Override
+//    @Transactional
+//    public CommentDetailVo.Response createComment(CommentCreateVo.Request commentCreateVo) {
+//        Board board = boardHelperService.getBoard(commentCreateVo.getBoardId());
+//        Comment comment = commentRepository.save(Comment.of(board, commentCreateVo));
+//
+//        final HierarchyType hierarchyType = commentCreateVo.getHierarchy().getHierarchyType();
+//        if (hierarchyType == HierarchyType.ORIGIN) {
+//            comment.getHierarchy().update(comment.getId());
+//            return commentMapper.toDetailVo(comment);
+//        }
+//
+//        final Long parentCommentId = commentCreateVo.getHierarchy().getParentId();
+//        Comment parentComment = commentHelperService.getComment(parentCommentId);
+//
+//        if (hierarchyType == HierarchyType.REPLY_FOR_ORIGIN) {
+//            Integer maxGroupOrder = getMaxGroupOrderWhenReplyForOrigin(parentCommentId);
+//
+//            comment.getHierarchy().update(
+//                    parentCommentId,
+//                    parentCommentId,
+//                    parentComment.getHierarchy().getGroupLayer() + 1,
+//                    maxGroupOrder + 1
+//            );
+//
+//        } else if (hierarchyType == HierarchyType.REPLY_FOR_REPLY) {
+//            Integer maxGroupOrder = getMaxGroupOrderWhenReplyForReply(parentComment);
+//
+//            comment.getHierarchy().update(
+//                    parentComment.getHierarchy().getCommonParentId(),
+//                    parentCommentId,
+//                    parentComment.getHierarchy().getGroupLayer() + 1,
+//                    maxGroupOrder + 1
+//            );
+//
+//            increaseCommentsGroupOrderBehindCreatedComment(parentComment, maxGroupOrder);
+//
+//        } else {
+//            throw new BadRequestException(CustomExceptionType.INVALID_HIERARCHY_TYPE);
+//        }
+//
+//        return commentMapper.toDetailVo(comment);
+//    }
 
     @Override
     @Transactional
@@ -130,6 +139,42 @@ public class CommentServiceImpl implements CommentService {
 
         throw new IllegalStateException(format("댓글 groupOrder 처리에 오류가 발생하였습니다. commonParentId: %d, parentId: %d"
                 , commonParentId, parentId));
+    }
+
+    @Override
+    protected <T extends HierarchyRequestAble> void updateEntityWhenHierarchyTypeIsOrigin(Comment entity, T request) {
+        entity.getHierarchy().update(entity.getId());
+    }
+
+    @Override
+    protected <T extends HierarchyRequestAble> void updateEntityWhenHierarchyTypeIsReplyForOrigin(Comment entity, T request) {
+        final Long parentId = request.getParentId();
+        Comment parentComment = commentHelperService.getComment(parentId);
+        Integer maxGroupOrder = getMaxGroupOrderWhenReplyForOrigin(parentId);
+        entity.getHierarchy().update(parentId,
+                parentId,
+                parentComment.getHierarchy().getGroupLayer() + 1,
+                maxGroupOrder + 1
+        );
+    }
+
+    @Override
+    protected <T extends HierarchyRequestAble> void updateEntityWhenHierarchyTypeIsReplyForReply(Comment entity, T request) {
+        final Long parentId = request.getParentId();
+        Comment parentComment = commentHelperService.getComment(parentId);
+        Integer maxGroupOrder = getMaxGroupOrderWhenReplyForReply(parentComment);
+        entity.getHierarchy().update(
+                parentComment.getHierarchy().getCommonParentId(),
+                parentId,
+                parentComment.getHierarchy().getGroupLayer() + 1,
+                maxGroupOrder + 1
+        );
+        increaseCommentsGroupOrderBehindCreatedComment(parentComment, maxGroupOrder);
+    }
+
+    @Override
+    protected <R> R createResponse(Comment entity) {
+        return (R) commentMapper.toDetailVo(entity);
     }
 
 }

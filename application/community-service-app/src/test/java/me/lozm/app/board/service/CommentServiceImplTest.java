@@ -9,7 +9,6 @@ import me.lozm.global.code.CommentType;
 import me.lozm.global.code.ContentType;
 import me.lozm.global.code.HierarchyType;
 import me.lozm.global.model.HierarchyResponseAble;
-import me.lozm.global.model.vo.CommonHierarchyVo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,6 +34,7 @@ class CommentServiceImplTest {
     @Autowired
     private CommentService commentService;
 
+
     @AfterEach
     void afterEach() {
         boardRepository.deleteAll();
@@ -48,7 +48,7 @@ class CommentServiceImplTest {
         BoardDetailVo.Response boardDetailVo = createBoard(BoardType.ALL, ContentType.GENERAL, boardService);
 
         // When
-        CommentDetailVo.Response commentDetailVo = createComment(boardDetailVo.getBoardId(), null, CommentType.GENERAL, commentService);
+        CommentDetailVo.Response commentDetailVo = createComment(boardDetailVo.getBoardId(), CommentType.GENERAL, commentService);
 
         // Then
         checkHierarchy(commentDetailVo.getHierarchy(), commentDetailVo.getCommentId(), commentDetailVo.getCommentId(), 0, 0);
@@ -60,13 +60,12 @@ class CommentServiceImplTest {
         // Given
         BoardDetailVo.Response boardDetailVo = createBoard(BoardType.ALL, ContentType.GENERAL, boardService);
 
-        CommentDetailVo.Response commentDetailVo = createComment(boardDetailVo.getBoardId(), null, CommentType.GENERAL, commentService);
+        CommentDetailVo.Response commentDetailVo = createComment(boardDetailVo.getBoardId(), CommentType.GENERAL, commentService);
 
         // When
-        CommonHierarchyVo.Request commonHierarchyRequestVo = new CommonHierarchyVo.Request(HierarchyType.REPLY_FOR_ORIGIN, commentDetailVo.getCommentId());
-        CommentDetailVo.Response replyCommentDetailVo1 = createComment(boardDetailVo.getBoardId(), commonHierarchyRequestVo, CommentType.GENERAL, commentService);
-        CommentDetailVo.Response replyCommentDetailVo2 = createComment(boardDetailVo.getBoardId(), commonHierarchyRequestVo, CommentType.GENERAL, commentService);
-        CommentDetailVo.Response replyCommentDetailVo3 = createComment(boardDetailVo.getBoardId(), commonHierarchyRequestVo, CommentType.GENERAL, commentService);
+        CommentDetailVo.Response replyCommentDetailVo1 = createComment(boardDetailVo.getBoardId(), HierarchyType.REPLY_FOR_ORIGIN, commentDetailVo.getCommentId(), CommentType.GENERAL, commentService);
+        CommentDetailVo.Response replyCommentDetailVo2 = createComment(boardDetailVo.getBoardId(), HierarchyType.REPLY_FOR_ORIGIN, commentDetailVo.getCommentId(), CommentType.GENERAL, commentService);
+        CommentDetailVo.Response replyCommentDetailVo3 = createComment(boardDetailVo.getBoardId(), HierarchyType.REPLY_FOR_ORIGIN, commentDetailVo.getCommentId(), CommentType.GENERAL, commentService);
 
         // Then
         checkHierarchy(commentDetailVo.getHierarchy(), commentDetailVo.getCommentId(), commentDetailVo.getCommentId(), 0, 0);
@@ -81,44 +80,34 @@ class CommentServiceImplTest {
         // Given
         BoardDetailVo.Response boardDetailVo = createBoard(BoardType.ALL, ContentType.GENERAL, boardService);
 
-        // commentId = 2
-        CommentDetailVo.Response commentDetailVo1 = createComment(boardDetailVo.getBoardId(), null, CommentType.GENERAL, commentService);
-
-        // commentId = 3
-        CommentDetailVo.Response commentDetailVo2 = createComment(boardDetailVo.getBoardId(), null, CommentType.GENERAL, commentService);
+        CommentDetailVo.Response commentDetailVo1 = createComment(boardDetailVo.getBoardId(), CommentType.GENERAL, commentService);
+        CommentDetailVo.Response commentDetailVo2 = createComment(boardDetailVo.getBoardId(), CommentType.GENERAL, commentService);
 
         // When
-        CommonHierarchyVo.Request commonHierarchyRequestVo1 = new CommonHierarchyVo.Request(HierarchyType.REPLY_FOR_ORIGIN, commentDetailVo1.getCommentId());
-        // commentId = 4
-        CommentDetailVo.Response replyCommentDetailVo1 = createComment(boardDetailVo.getBoardId(), commonHierarchyRequestVo1, CommentType.GENERAL, commentService);
-        CommonHierarchyVo.Request commonHierarchyRequestVo1_1 = new CommonHierarchyVo.Request(HierarchyType.REPLY_FOR_REPLY, replyCommentDetailVo1.getCommentId());
+        CommentDetailVo.Response replyCommentDetailVo1_1 = createComment(boardDetailVo.getBoardId(), HierarchyType.REPLY_FOR_ORIGIN, commentDetailVo1.getCommentId(), CommentType.GENERAL, commentService);
 
-        // commentId = 5
-        CommentDetailVo.Response replyCommentDetailVo1_1 = createComment(boardDetailVo.getBoardId(), commonHierarchyRequestVo1_1, CommentType.GENERAL, commentService);
-        // commentId = 6
-        CommentDetailVo.Response replyCommentDetailVo1_2 = createComment(boardDetailVo.getBoardId(), commonHierarchyRequestVo1_1, CommentType.GENERAL, commentService);
-        // commentId = 7
-        CommentDetailVo.Response replyCommentDetailVo1_3 = createComment(boardDetailVo.getBoardId(), commonHierarchyRequestVo1_1, CommentType.GENERAL, commentService);
+        CommentDetailVo.Response replyCommentDetailVo1_1_1 = createComment(boardDetailVo.getBoardId(), HierarchyType.REPLY_FOR_REPLY, replyCommentDetailVo1_1.getCommentId(), CommentType.GENERAL, commentService);
+        CommentDetailVo.Response replyCommentDetailVo1_1_2 = createComment(boardDetailVo.getBoardId(), HierarchyType.REPLY_FOR_REPLY, replyCommentDetailVo1_1.getCommentId(), CommentType.GENERAL, commentService);
+        CommentDetailVo.Response replyCommentDetailVo1_1_3 = createComment(boardDetailVo.getBoardId(), HierarchyType.REPLY_FOR_REPLY, replyCommentDetailVo1_1.getCommentId(), CommentType.GENERAL, commentService);
 
-        CommentDetailVo.Response replyCommentDetailVo2 = createComment(boardDetailVo.getBoardId(), commonHierarchyRequestVo1, CommentType.GENERAL, commentService);
-        CommentDetailVo.Response replyCommentDetailVo3 = createComment(boardDetailVo.getBoardId(), commonHierarchyRequestVo1, CommentType.GENERAL, commentService);
+        CommentDetailVo.Response replyCommentDetailVo1_2 = createComment(boardDetailVo.getBoardId(), HierarchyType.REPLY_FOR_ORIGIN, commentDetailVo1.getCommentId(), CommentType.GENERAL, commentService);
+        CommentDetailVo.Response replyCommentDetailVo1_3 = createComment(boardDetailVo.getBoardId(), HierarchyType.REPLY_FOR_ORIGIN, commentDetailVo1.getCommentId(), CommentType.GENERAL, commentService);
 
-        CommonHierarchyVo.Request commonHierarchyRequestVo2 = new CommonHierarchyVo.Request(HierarchyType.REPLY_FOR_ORIGIN, commentDetailVo2.getCommentId());
-        CommentDetailVo.Response replyCommentDetailVo4 = createComment(boardDetailVo.getBoardId(), commonHierarchyRequestVo2, CommentType.GENERAL, commentService);
-        CommentDetailVo.Response replyCommentDetailVo5 = createComment(boardDetailVo.getBoardId(), commonHierarchyRequestVo2, CommentType.GENERAL, commentService);
+        CommentDetailVo.Response replyCommentDetailVo2_1 = createComment(boardDetailVo.getBoardId(), HierarchyType.REPLY_FOR_ORIGIN, commentDetailVo2.getCommentId(), CommentType.GENERAL, commentService);
+        CommentDetailVo.Response replyCommentDetailVo2_2 = createComment(boardDetailVo.getBoardId(), HierarchyType.REPLY_FOR_ORIGIN, commentDetailVo2.getCommentId(), CommentType.GENERAL, commentService);
 
         // Then
         checkHierarchy(commentDetailVo1.getHierarchy(), commentDetailVo1.getCommentId(), commentDetailVo1.getCommentId(), 0, 0);
-        checkHierarchy(replyCommentDetailVo1.getHierarchy(), commentDetailVo1.getCommentId(), commentDetailVo1.getCommentId(), 1, 1);
-        checkHierarchy(replyCommentDetailVo1_1.getHierarchy(), commentDetailVo1.getCommentId(), replyCommentDetailVo1.getCommentId(), 2, 2);
-        checkHierarchy(replyCommentDetailVo1_2.getHierarchy(), commentDetailVo1.getCommentId(), replyCommentDetailVo1.getCommentId(), 2, 3);
-        checkHierarchy(replyCommentDetailVo1_3.getHierarchy(), commentDetailVo1.getCommentId(), replyCommentDetailVo1.getCommentId(), 2, 4);
-        checkHierarchy(replyCommentDetailVo2.getHierarchy(), commentDetailVo1.getCommentId(), commentDetailVo1.getCommentId(), 1, 5);
-        checkHierarchy(replyCommentDetailVo3.getHierarchy(), commentDetailVo1.getCommentId(), commentDetailVo1.getCommentId(), 1, 6);
+        checkHierarchy(replyCommentDetailVo1_1.getHierarchy(), commentDetailVo1.getCommentId(), commentDetailVo1.getCommentId(), 1, 1);
+        checkHierarchy(replyCommentDetailVo1_1_1.getHierarchy(), commentDetailVo1.getCommentId(), replyCommentDetailVo1_1.getCommentId(), 2, 2);
+        checkHierarchy(replyCommentDetailVo1_1_2.getHierarchy(), commentDetailVo1.getCommentId(), replyCommentDetailVo1_1.getCommentId(), 2, 3);
+        checkHierarchy(replyCommentDetailVo1_1_3.getHierarchy(), commentDetailVo1.getCommentId(), replyCommentDetailVo1_1.getCommentId(), 2, 4);
+        checkHierarchy(replyCommentDetailVo1_2.getHierarchy(), commentDetailVo1.getCommentId(), commentDetailVo1.getCommentId(), 1, 5);
+        checkHierarchy(replyCommentDetailVo1_3.getHierarchy(), commentDetailVo1.getCommentId(), commentDetailVo1.getCommentId(), 1, 6);
 
         checkHierarchy(commentDetailVo2.getHierarchy(), commentDetailVo2.getCommentId(), commentDetailVo2.getCommentId(), 0, 0);
-        checkHierarchy(replyCommentDetailVo4.getHierarchy(), commentDetailVo2.getCommentId(), commentDetailVo2.getCommentId(), 1, 1);
-        checkHierarchy(replyCommentDetailVo5.getHierarchy(), commentDetailVo2.getCommentId(), commentDetailVo2.getCommentId(), 1, 2);
+        checkHierarchy(replyCommentDetailVo2_1.getHierarchy(), commentDetailVo2.getCommentId(), commentDetailVo2.getCommentId(), 1, 1);
+        checkHierarchy(replyCommentDetailVo2_2.getHierarchy(), commentDetailVo2.getCommentId(), commentDetailVo2.getCommentId(), 1, 2);
     }
 
     private void checkHierarchy(HierarchyResponseAble originCommentHierarchy, Long commonParentId, Long parentId, Integer groupLayer, Integer groupOrder) {

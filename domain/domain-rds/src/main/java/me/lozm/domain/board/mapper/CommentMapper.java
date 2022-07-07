@@ -22,7 +22,8 @@ public interface CommentMapper {
     CommentPageDto.Response toPageDto(CommentPageVo.Element element);
 
 
-    @Mapping(source = "requestDto.hierarchy", target = "hierarchy")
+    @Mapping(source = "requestDto.hierarchyType", target = "hierarchyType")
+    @Mapping(source = "requestDto.parentId", target = "parentId")
     @Mapping(source = "requestDto.commentType", target = "commentType")
     @Mapping(source = "requestDto.content", target = "content")
     CommentCreateVo.Request toCreateVo(Long boardId, CommentCreateDto.Request requestDto);
