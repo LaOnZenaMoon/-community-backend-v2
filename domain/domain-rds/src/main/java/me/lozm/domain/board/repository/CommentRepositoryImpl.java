@@ -25,6 +25,7 @@ public class CommentRepositoryImpl extends Querydsl4RepositorySupport<Comment> i
                 ))
                         .from(QComment.comment)
                         .where(QComment.comment.board.id.eq(requestVo.getBoardId()))
+                        .orderBy(QComment.comment.hierarchy.commonParentId.desc(), QComment.comment.hierarchy.groupOrder.asc())
         );
     }
 
