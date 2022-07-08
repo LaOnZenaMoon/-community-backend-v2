@@ -76,9 +76,9 @@ class CommentControllerTest extends BaseDocumentationTest {
                 ));
     }
 
-    @DisplayName("댓글 생성 성공")
+    @DisplayName("댓글 생성 성공 > 원글")
     @Test
-    void createComment_success() throws Exception {
+    void createComment_hierarchy_origin_success() throws Exception {
         // Given
         BoardDetailVo.Response boardDetailVo = createBoard(BoardType.NEWS, ContentType.GENERAL, boardService);
 
@@ -88,6 +88,96 @@ class CommentControllerTest extends BaseDocumentationTest {
         final String content = faker.lorem().sentence(10);
 
         final String requestBody = "{\n" +
+                "  \"commentType\": \"" + commentType + "\",\n" +
+                "  \"content\": \"" + content + "\"\n" +
+                "}";
+
+        // When
+        ResultActions resultActions = mockMvc.perform(
+                RestDocumentationRequestBuilders.post("/boards/{boardId}/comments", boardDetailVo.getBoardId())
+                        .header(HttpHeaders.AUTHORIZATION, DocumentationUtils.getAccessToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody)
+        );
+
+        // Then
+        resultActions.andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andDo(this.documentationHandler.document(
+                        pathParameters(parameterWithName("boardId").description("게시글 ID")),
+                        requestFields(
+                                fieldWithPath("hierarchyType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("생성할 댓글 계층 유형", HierarchyType.class)).optional(),
+                                fieldWithPath("parentId").type(JsonFieldType.NUMBER).description("생성할 댓글에 대한 상위 댓글 ID").optional(),
+                                fieldWithPath("commentType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("댓글 유형", CommentType.class)),
+                                fieldWithPath("content").type(JsonFieldType.STRING).description("내용")
+                        ),
+                        responseFields(DocumentationUtils.getSuccessDefaultResponse())
+                                .andWithPrefix(PREFIX_DATA, getCommentDetailResponseDto())
+                ));
+    }
+
+    @DisplayName("댓글 생성 성공 > 원글에 대한 댓글")
+    @Test
+    void createComment_hierarchy_reply_for_origin_success() throws Exception {
+        // Given
+        BoardDetailVo.Response boardDetailVo = createBoard(BoardType.NEWS, ContentType.GENERAL, boardService);
+
+        CommentDetailVo.Response commentDetailVo = createComment(boardDetailVo.getBoardId(), CommentType.GENERAL, commentService);
+
+        final Faker faker = new Faker();
+
+        final CommentType commentType = CommentType.NOTICE;
+        final String content = faker.lorem().sentence(10);
+
+        final String requestBody = "{\n" +
+                "  \"hierarchyType\": \"" + HierarchyType.REPLY_FOR_ORIGIN + "\",\n" +
+                "  \"parentId\": " + commentDetailVo.getCommentId() + ",\n" +
+                "  \"commentType\": \"" + commentType + "\",\n" +
+                "  \"content\": \"" + content + "\"\n" +
+                "}";
+
+        // When
+        ResultActions resultActions = mockMvc.perform(
+                RestDocumentationRequestBuilders.post("/boards/{boardId}/comments", boardDetailVo.getBoardId())
+                        .header(HttpHeaders.AUTHORIZATION, DocumentationUtils.getAccessToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody)
+        );
+
+        // Then
+        resultActions.andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andDo(this.documentationHandler.document(
+                        pathParameters(parameterWithName("boardId").description("게시글 ID")),
+                        requestFields(
+                                fieldWithPath("hierarchyType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("생성할 댓글 계층 유형", HierarchyType.class)).optional(),
+                                fieldWithPath("parentId").type(JsonFieldType.NUMBER).description("생성할 댓글에 대한 상위 댓글 ID").optional(),
+                                fieldWithPath("commentType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("댓글 유형", CommentType.class)),
+                                fieldWithPath("content").type(JsonFieldType.STRING).description("내용")
+                        ),
+                        responseFields(DocumentationUtils.getSuccessDefaultResponse())
+                                .andWithPrefix(PREFIX_DATA, getCommentDetailResponseDto())
+                ));
+    }
+
+    @DisplayName("댓글 생성 성공 > 댓글에 대한 댓글")
+    @Test
+    void createComment_hierarchy_reply_for_reply_success() throws Exception {
+        // Given
+        BoardDetailVo.Response boardDetailVo = createBoard(BoardType.NEWS, ContentType.GENERAL, boardService);
+
+        CommentDetailVo.Response commentDetailVo_origin = createComment(boardDetailVo.getBoardId(), CommentType.GENERAL, commentService);
+
+        CommentDetailVo.Response commentDetailVo_reply_for_origin = createComment(boardDetailVo.getBoardId(), HierarchyType.REPLY_FOR_ORIGIN, commentDetailVo_origin.getCommentId(), CommentType.GENERAL, commentService);
+
+        final Faker faker = new Faker();
+
+        final CommentType commentType = CommentType.NOTICE;
+        final String content = faker.lorem().sentence(10);
+
+        final String requestBody = "{\n" +
+                "  \"hierarchyType\": \"" + HierarchyType.REPLY_FOR_REPLY + "\",\n" +
+                "  \"parentId\": " + commentDetailVo_reply_for_origin.getCommentId() + ",\n" +
                 "  \"commentType\": \"" + commentType + "\",\n" +
                 "  \"content\": \"" + content + "\"\n" +
                 "}";
