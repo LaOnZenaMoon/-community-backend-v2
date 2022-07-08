@@ -19,12 +19,13 @@ public class CommentRepositoryImpl extends Querydsl4RepositorySupport<Comment> i
         return applyPagination(requestVo.getPageQueryParameters().getPageRequest(), query ->
                 select(new QCommentPageVo_Element(
                         QComment.comment.id,
-                        QComment.comment.hierarchicalComment,
+                        QComment.comment.hierarchy,
                         QComment.comment.commentType,
                         QComment.comment.content
                 ))
                         .from(QComment.comment)
                         .where(QComment.comment.board.id.eq(requestVo.getBoardId()))
+                        .orderBy(QComment.comment.hierarchy.commonParentId.desc(), QComment.comment.hierarchy.groupOrder.asc())
         );
     }
 

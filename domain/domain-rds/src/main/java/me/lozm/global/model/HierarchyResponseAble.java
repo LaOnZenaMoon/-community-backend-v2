@@ -1,6 +1,6 @@
 package me.lozm.global.model;
 
-public interface HierarchyAble {
+public interface HierarchyResponseAble {
 
     Long getCommonParentId();
 

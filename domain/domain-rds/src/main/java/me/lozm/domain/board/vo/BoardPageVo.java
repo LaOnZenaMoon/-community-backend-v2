@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.lozm.global.code.BoardType;
 import me.lozm.global.code.ContentType;
-import me.lozm.global.model.HierarchyAble;
+import me.lozm.global.model.HierarchyResponseAble;
 import me.lozm.global.model.dto.PageQueryParameters;
 import me.lozm.global.model.entity.HierarchicalEntity;
 import org.springframework.util.Assert;
@@ -28,7 +28,7 @@ public class BoardPageVo {
     @Getter
     public static class Element {
         private final Long boardId;
-        private final HierarchyAble hierarchy;
+        private final HierarchyResponseAble hierarchy;
         private final BoardType boardType;
         private final ContentType contentType;
         private final Long viewCount;

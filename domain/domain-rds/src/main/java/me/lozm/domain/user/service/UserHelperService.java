@@ -3,8 +3,6 @@ package me.lozm.domain.user.service;
 import lombok.RequiredArgsConstructor;
 import me.lozm.domain.user.entity.User;
 import me.lozm.domain.user.repository.UserRepository;
-import me.lozm.global.code.UseYn;
-import me.lozm.global.code.UsersType;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

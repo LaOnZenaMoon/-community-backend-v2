@@ -12,6 +12,7 @@ import me.lozm.domain.board.vo.CommentDetailVo;
 import me.lozm.global.code.BoardType;
 import me.lozm.global.code.CommentType;
 import me.lozm.global.code.ContentType;
+import me.lozm.global.code.HierarchyType;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TestUtils {
@@ -29,9 +30,22 @@ public class TestUtils {
     public static CommentDetailVo.Response createComment(Long boardId, CommentType commentType, CommentService commentService) {
         final Faker faker = new Faker();
         return commentService.createComment(CommentCreateVo.Request.builder()
-                        .boardId(boardId)
-                        .commentType(commentType)
-                        .content(faker.lorem().sentence())
+                .boardId(boardId)
+                .hierarchyType(HierarchyType.ORIGIN)
+                .parentId(null)
+                .commentType(commentType)
+                .content(faker.lorem().sentence())
+                .build());
+    }
+
+    public static CommentDetailVo.Response createComment(Long boardId, HierarchyType hierarchyType, Long parentId, CommentType commentType, CommentService commentService) {
+        final Faker faker = new Faker();
+        return commentService.createComment(CommentCreateVo.Request.builder()
+                .boardId(boardId)
+                .hierarchyType(hierarchyType)
+                .parentId(parentId)
+                .commentType(commentType)
+                .content(faker.lorem().sentence())
                 .build());
     }
 

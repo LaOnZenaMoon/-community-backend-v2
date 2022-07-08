@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.lozm.global.code.CommentType;
-import me.lozm.global.model.HierarchyAble;
+import me.lozm.global.model.HierarchyResponseAble;
 import me.lozm.global.model.dto.PageQueryParameters;
 import org.springframework.util.Assert;
 
@@ -29,12 +29,12 @@ public class CommentPageVo {
     @Getter
     public static class Element {
         private final Long commentId;
-        private final HierarchyAble hierarchy;
+        private final HierarchyResponseAble hierarchy;
         private final CommentType commentType;
         private final String content;
 
         @QueryProjection
-        public Element(Long commentId, HierarchyAble hierarchy, CommentType commentType, String content) {
+        public Element(Long commentId, HierarchyResponseAble hierarchy, CommentType commentType, String content) {
             this.commentId = commentId;
             this.hierarchy = hierarchy;
             this.commentType = commentType;

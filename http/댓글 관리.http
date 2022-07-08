@@ -28,7 +28,7 @@ client.test("Request executed successfully", function() {
 client.global.set("BOARD_ID", response.body.data.boardId);
 %}
 
-### 댓글 생성
+### 댓글 생성 성공 > 원글
 POST {{service-app}}/boards/{{BOARD_ID}}/comments
 Authorization: Bearer {{ACCESS_TOKEN}}
 Content-Type: application/json
@@ -45,7 +45,7 @@ client.test("Request executed successfully", function() {
 client.global.set("COMMENT_ID", response.body.data.commentId);
 %}
 
-### 댓글 생성
+### 댓글 생성 성공 > 원글
 POST {{service-app}}/boards/{{BOARD_ID}}/comments
 Authorization: Bearer {{ACCESS_TOKEN}}
 Content-Type: application/json
@@ -62,7 +62,121 @@ client.test("Request executed successfully", function() {
 client.global.set("COMMENT_ID", response.body.data.commentId);
 %}
 
-### 댓글 생성
+### 댓글 생성 성공 > 원글에 대한 댓글
+POST {{service-app}}/boards/{{BOARD_ID}}/comments
+Authorization: Bearer {{ACCESS_TOKEN}}
+Content-Type: application/json
+
+{
+  "hierarchyType": "REPLY_FOR_ORIGIN",
+  "parentId": {{COMMENT_ID}},
+  "commentType": "GENERAL",
+  "content": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status == 200, "Response status is wrong");
+});
+client.global.set("COMMENT_ID_FOR_REPLY_FOR_ORIGIN", response.body.data.commentId);
+%}
+
+### 댓글 생성 성공 > 댓글에 대한 댓글
+POST {{service-app}}/boards/{{BOARD_ID}}/comments
+Authorization: Bearer {{ACCESS_TOKEN}}
+Content-Type: application/json
+
+{
+  "hierarchyType": "REPLY_FOR_REPLY",
+  "parentId": {{COMMENT_ID_FOR_REPLY_FOR_ORIGIN}},
+  "commentType": "GENERAL",
+  "content": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status == 200, "Response status is wrong");
+});
+client.global.set("COMMENT_ID_FOR_REPLY_FOR_REPLY", response.body.data.commentId);
+%}
+
+### 댓글 생성 성공 > 원글에 대한 댓글
+POST {{service-app}}/boards/{{BOARD_ID}}/comments
+Authorization: Bearer {{ACCESS_TOKEN}}
+Content-Type: application/json
+
+{
+  "hierarchyType": "REPLY_FOR_ORIGIN",
+  "parentId": {{COMMENT_ID}},
+  "commentType": "GENERAL",
+  "content": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status == 200, "Response status is wrong");
+});
+client.global.set("COMMENT_ID_FOR_REPLY_FOR_ORIGIN", response.body.data.commentId);
+%}
+
+### 댓글 생성 성공 > 댓글에 대한 댓글
+POST {{service-app}}/boards/{{BOARD_ID}}/comments
+Authorization: Bearer {{ACCESS_TOKEN}}
+Content-Type: application/json
+
+{
+  "hierarchyType": "REPLY_FOR_REPLY",
+  "parentId": {{COMMENT_ID_FOR_REPLY_FOR_ORIGIN}},
+  "commentType": "GENERAL",
+  "content": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status == 200, "Response status is wrong");
+});
+client.global.set("COMMENT_ID_FOR_REPLY_FOR_REPLY", response.body.data.commentId);
+%}
+
+### 댓글 생성 성공 > 원글에 대한 댓글
+POST {{service-app}}/boards/{{BOARD_ID}}/comments
+Authorization: Bearer {{ACCESS_TOKEN}}
+Content-Type: application/json
+
+{
+  "hierarchyType": "REPLY_FOR_ORIGIN",
+  "parentId": {{COMMENT_ID}},
+  "commentType": "GENERAL",
+  "content": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status == 200, "Response status is wrong");
+});
+client.global.set("COMMENT_ID_FOR_REPLY_FOR_ORIGIN", response.body.data.commentId);
+%}
+
+### 댓글 생성 성공 > 댓글에 대한 댓글
+POST {{service-app}}/boards/{{BOARD_ID}}/comments
+Authorization: Bearer {{ACCESS_TOKEN}}
+Content-Type: application/json
+
+{
+  "hierarchyType": "REPLY_FOR_REPLY",
+  "parentId": {{COMMENT_ID_FOR_REPLY_FOR_ORIGIN}},
+  "commentType": "GENERAL",
+  "content": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status == 200, "Response status is wrong");
+});
+client.global.set("COMMENT_ID_FOR_REPLY_FOR_REPLY", response.body.data.commentId);
+%}
+
+### 댓글 생성 성공 > 원글
 POST {{service-app}}/boards/{{BOARD_ID}}/comments
 Authorization: Bearer {{ACCESS_TOKEN}}
 Content-Type: application/json
@@ -79,7 +193,7 @@ client.test("Request executed successfully", function() {
 client.global.set("COMMENT_ID", response.body.data.commentId);
 %}
 
-### 댓글 생성
+### 댓글 생성 성공 > 원글
 POST {{service-app}}/boards/{{BOARD_ID}}/comments
 Authorization: Bearer {{ACCESS_TOKEN}}
 Content-Type: application/json
@@ -96,7 +210,45 @@ client.test("Request executed successfully", function() {
 client.global.set("COMMENT_ID", response.body.data.commentId);
 %}
 
-### 댓글 생성
+### 댓글 생성 성공 > 원글에 대한 댓글
+POST {{service-app}}/boards/{{BOARD_ID}}/comments
+Authorization: Bearer {{ACCESS_TOKEN}}
+Content-Type: application/json
+
+{
+  "hierarchyType": "REPLY_FOR_ORIGIN",
+  "parentId": {{COMMENT_ID}},
+  "commentType": "GENERAL",
+  "content": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status == 200, "Response status is wrong");
+});
+client.global.set("COMMENT_ID_FOR_REPLY_FOR_ORIGIN", response.body.data.commentId);
+%}
+
+### 댓글 생성 성공 > 댓글에 대한 댓글
+POST {{service-app}}/boards/{{BOARD_ID}}/comments
+Authorization: Bearer {{ACCESS_TOKEN}}
+Content-Type: application/json
+
+{
+  "hierarchyType": "REPLY_FOR_REPLY",
+  "parentId": {{COMMENT_ID_FOR_REPLY_FOR_ORIGIN}},
+  "commentType": "GENERAL",
+  "content": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status == 200, "Response status is wrong");
+});
+client.global.set("COMMENT_ID_FOR_REPLY_FOR_REPLY", response.body.data.commentId);
+%}
+
+### 댓글 생성 성공 > 원글
 POST {{service-app}}/boards/{{BOARD_ID}}/comments
 Authorization: Bearer {{ACCESS_TOKEN}}
 Content-Type: application/json
@@ -113,7 +265,7 @@ client.test("Request executed successfully", function() {
 client.global.set("COMMENT_ID", response.body.data.commentId);
 %}
 
-### 댓글 생성
+### 댓글 생성 성공 > 원글
 POST {{service-app}}/boards/{{BOARD_ID}}/comments
 Authorization: Bearer {{ACCESS_TOKEN}}
 Content-Type: application/json
@@ -130,12 +282,14 @@ client.test("Request executed successfully", function() {
 client.global.set("COMMENT_ID", response.body.data.commentId);
 %}
 
-### 댓글 생성
+### 댓글 생성 성공 > 원글에 대한 댓글
 POST {{service-app}}/boards/{{BOARD_ID}}/comments
 Authorization: Bearer {{ACCESS_TOKEN}}
 Content-Type: application/json
 
 {
+  "hierarchyType": "REPLY_FOR_ORIGIN",
+  "parentId": {{COMMENT_ID}},
   "commentType": "GENERAL",
   "content": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
 }
@@ -144,15 +298,17 @@ Content-Type: application/json
 client.test("Request executed successfully", function() {
   client.assert(response.status == 200, "Response status is wrong");
 });
-client.global.set("COMMENT_ID", response.body.data.commentId);
+client.global.set("COMMENT_ID_FOR_REPLY_FOR_ORIGIN", response.body.data.commentId);
 %}
 
-### 댓글 생성
+### 댓글 생성 성공 > 원글에 대한 댓글
 POST {{service-app}}/boards/{{BOARD_ID}}/comments
 Authorization: Bearer {{ACCESS_TOKEN}}
 Content-Type: application/json
 
 {
+  "hierarchyType": "REPLY_FOR_ORIGIN",
+  "parentId": {{COMMENT_ID}},
   "commentType": "GENERAL",
   "content": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
 }
@@ -161,15 +317,17 @@ Content-Type: application/json
 client.test("Request executed successfully", function() {
   client.assert(response.status == 200, "Response status is wrong");
 });
-client.global.set("COMMENT_ID", response.body.data.commentId);
+client.global.set("COMMENT_ID_FOR_REPLY_FOR_ORIGIN", response.body.data.commentId);
 %}
 
-### 댓글 생성
+### 댓글 생성 성공 > 댓글에 대한 댓글
 POST {{service-app}}/boards/{{BOARD_ID}}/comments
 Authorization: Bearer {{ACCESS_TOKEN}}
 Content-Type: application/json
 
 {
+  "hierarchyType": "REPLY_FOR_REPLY",
+  "parentId": {{COMMENT_ID_FOR_REPLY_FOR_ORIGIN}},
   "commentType": "GENERAL",
   "content": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
 }
@@ -178,15 +336,17 @@ Content-Type: application/json
 client.test("Request executed successfully", function() {
   client.assert(response.status == 200, "Response status is wrong");
 });
-client.global.set("COMMENT_ID", response.body.data.commentId);
+client.global.set("COMMENT_ID_FOR_REPLY_FOR_REPLY", response.body.data.commentId);
 %}
 
-### 댓글 생성
+### 댓글 생성 성공 > 댓글에 대한 댓글
 POST {{service-app}}/boards/{{BOARD_ID}}/comments
 Authorization: Bearer {{ACCESS_TOKEN}}
 Content-Type: application/json
 
 {
+  "hierarchyType": "REPLY_FOR_REPLY",
+  "parentId": {{COMMENT_ID_FOR_REPLY_FOR_ORIGIN}},
   "commentType": "GENERAL",
   "content": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
 }
@@ -195,75 +355,7 @@ Content-Type: application/json
 client.test("Request executed successfully", function() {
   client.assert(response.status == 200, "Response status is wrong");
 });
-client.global.set("COMMENT_ID", response.body.data.commentId);
-%}
-
-### 댓글 생성
-POST {{service-app}}/boards/{{BOARD_ID}}/comments
-Authorization: Bearer {{ACCESS_TOKEN}}
-Content-Type: application/json
-
-{
-  "commentType": "GENERAL",
-  "content": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-}
-
-> {%
-client.test("Request executed successfully", function() {
-  client.assert(response.status == 200, "Response status is wrong");
-});
-client.global.set("COMMENT_ID", response.body.data.commentId);
-%}
-
-### 댓글 생성
-POST {{service-app}}/boards/{{BOARD_ID}}/comments
-Authorization: Bearer {{ACCESS_TOKEN}}
-Content-Type: application/json
-
-{
-  "commentType": "GENERAL",
-  "content": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-}
-
-> {%
-client.test("Request executed successfully", function() {
-  client.assert(response.status == 200, "Response status is wrong");
-});
-client.global.set("COMMENT_ID", response.body.data.commentId);
-%}
-
-### 댓글 생성
-POST {{service-app}}/boards/{{BOARD_ID}}/comments
-Authorization: Bearer {{ACCESS_TOKEN}}
-Content-Type: application/json
-
-{
-  "commentType": "GENERAL",
-  "content": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-}
-
-> {%
-client.test("Request executed successfully", function() {
-  client.assert(response.status == 200, "Response status is wrong");
-});
-client.global.set("COMMENT_ID", response.body.data.commentId);
-%}
-
-### 댓글 생성
-POST {{service-app}}/boards/{{BOARD_ID}}/comments
-Authorization: Bearer {{ACCESS_TOKEN}}
-Content-Type: application/json
-
-{
-  "commentType": "GENERAL",
-  "content": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-}
-
-> {%
-client.test("Request executed successfully", function() {
-  client.assert(response.status == 200, "Response status is wrong");
-});
-client.global.set("COMMENT_ID", response.body.data.commentId);
+client.global.set("COMMENT_ID_FOR_REPLY_FOR_REPLY", response.body.data.commentId);
 %}
 
 ### 댓글 수정
@@ -284,7 +376,7 @@ client.global.set("COMMENT_ID", response.body.data.commentId);
 %}
 
 ### 댓글 삭제
-DELETE {{service-app}}/boards/{{BOARD_ID}}/comments/{{COMMENT_ID}}
+DELETE {{service-app}}/boards/{{BOARD_ID}}/comments/{{COMMENT_ID_FOR_REPLY_FOR_REPLY}}
 Authorization: Bearer {{ACCESS_TOKEN}}
 
 > {%
