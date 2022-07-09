@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RequestMapping("boards/{boardId}/comments")
 @RestController
 @RequiredArgsConstructor
 public class CommentController {
@@ -29,7 +30,7 @@ public class CommentController {
     private final CommentMapper commentMapper;
 
 
-    @GetMapping("boards/{boardId}/comments")
+    @GetMapping
     public CommonResponseDto<CommonPageResponseDto<CommentPageDto.Response>> getComments(PageQueryParameters pageQueryParameters,
                                                                                          @PathVariable("boardId") Long boardId) {
 
@@ -40,7 +41,7 @@ public class CommentController {
         return CommonResponseDto.success(new CommonPageResponseDto<>(responsePageVo, responseDtoList));
     }
 
-    @PostMapping("boards/{boardId}/comments")
+    @PostMapping
     public CommonResponseDto<CommentDetailDto.Response> createComment(@RequestBody @Validated CommentCreateDto.Request requestDto,
                                                                       @PathVariable("boardId") Long boardId) {
 
@@ -50,7 +51,7 @@ public class CommentController {
         return CommonResponseDto.success(responseDto);
     }
 
-    @PutMapping("boards/{boardId}/comments/{commentId}")
+    @PutMapping("{commentId}")
     public CommonResponseDto<CommentDetailDto.Response> updateComment(@RequestBody @Validated CommentUpdateDto.Request requestDto,
                                                                       @PathVariable("boardId") Long boardId,
                                                                       @PathVariable("commentId") Long commentId) {
@@ -61,7 +62,7 @@ public class CommentController {
         return CommonResponseDto.success(responseDto);
     }
 
-    @DeleteMapping("boards/{boardId}/comments/{commentId}")
+    @DeleteMapping("{commentId}")
     public CommonResponseDto deleteComment(@PathVariable("boardId") Long boardId, @PathVariable("commentId") Long commentId) {
         commentService.deleteComment(boardId, commentId);
         return CommonResponseDto.success();
