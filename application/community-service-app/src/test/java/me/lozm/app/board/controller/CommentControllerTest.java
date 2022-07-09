@@ -78,7 +78,7 @@ class CommentControllerTest extends BaseDocumentationTest {
 
     @DisplayName("댓글 생성 성공 > 원글")
     @Test
-    void createComment_hierarchy_origin_success() throws Exception {
+    void createComment_HierarchyOrigin_success() throws Exception {
         // Given
         BoardDetailVo.Response boardDetailVo = createBoard(BoardType.NEWS, ContentType.GENERAL, boardService);
 
@@ -118,7 +118,7 @@ class CommentControllerTest extends BaseDocumentationTest {
 
     @DisplayName("댓글 생성 성공 > 원글에 대한 댓글")
     @Test
-    void createComment_hierarchy_reply_for_origin_success() throws Exception {
+    void createComment_HierarchyReplyForOrigin_success() throws Exception {
         // Given
         BoardDetailVo.Response boardDetailVo = createBoard(BoardType.NEWS, ContentType.GENERAL, boardService);
 
@@ -162,7 +162,7 @@ class CommentControllerTest extends BaseDocumentationTest {
 
     @DisplayName("댓글 생성 성공 > 댓글에 대한 댓글")
     @Test
-    void createComment_hierarchy_reply_for_reply_success() throws Exception {
+    void createComment_HierarchyReplyForReply_success() throws Exception {
         // Given
         BoardDetailVo.Response boardDetailVo = createBoard(BoardType.NEWS, ContentType.GENERAL, boardService);
 

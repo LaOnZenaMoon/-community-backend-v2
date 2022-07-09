@@ -43,7 +43,7 @@ class CommentServiceImplTest {
 
     @DisplayName("댓글 생성 성공 > 원글")
     @Test
-    void createComment_hierarchy_origin_success() {
+    void createComment_HierarchyOrigin_success() {
         // Given
         BoardDetailVo.Response boardDetailVo = createBoard(BoardType.ALL, ContentType.GENERAL, boardService);
 
@@ -56,7 +56,7 @@ class CommentServiceImplTest {
 
     @DisplayName("댓글 생성 성공 > 원글에 대한 댓글")
     @Test
-    void createComment_hierarchy_reply_for_origin_success() {
+    void createComment_HierarchyReplyForOrigin_success() {
         // Given
         BoardDetailVo.Response boardDetailVo = createBoard(BoardType.ALL, ContentType.GENERAL, boardService);
 
@@ -76,7 +76,7 @@ class CommentServiceImplTest {
 
     @DisplayName("댓글 생성 성공 > 댓글에 대한 댓글")
     @Test
-    void createComment_hierarchy_reply_for_reply_success() {
+    void createComment_HierarchyReplyForReply_success() {
         // Given
         BoardDetailVo.Response boardDetailVo = createBoard(BoardType.ALL, ContentType.GENERAL, boardService);
 

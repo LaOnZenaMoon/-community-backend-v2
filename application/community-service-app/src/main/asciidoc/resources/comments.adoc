@@ -21,28 +21,28 @@ include::{snippets}/get-comments_success/http-response.adoc[]
 댓글 생성
 
 ===== Request Body Fields
-include::{snippets}/create-comment_hierarchy_origin_success/request-fields.adoc[]
+include::{snippets}/create-comment_HierarchyOrigin_success/request-fields.adoc[]
 
 ===== Request Sample 1: 댓글 생성 성공 > 원글
-include::{snippets}/create-comment_hierarchy_origin_success/http-request.adoc[]
+include::{snippets}/create-comment_HierarchyOrigin_success/http-request.adoc[]
 
 ===== Request Sample 2: 댓글 생성 성공 > 원글에 대한 댓글
-include::{snippets}/create-comment_hierarchy_reply_for_origin_success/http-request.adoc[]
+include::{snippets}/create-comment_HierarchyReplyForOrigin_success/http-request.adoc[]
 
 ===== Request Sample 3: 댓글 생성 성공 > 댓글에 대한 댓글
-include::{snippets}/create-comment_hierarchy_reply_for_reply_success/http-request.adoc[]
+include::{snippets}/create-comment_HierarchyReplyForReply_success/http-request.adoc[]
 
 ===== Response Body Fields
-include::{snippets}/create-comment_hierarchy_origin_success/response-fields.adoc[]
+include::{snippets}/create-comment_HierarchyOrigin_success/response-fields.adoc[]
 
 ===== Response Sample 1: 댓글 생성 성공 > 원글
-include::{snippets}/create-comment_hierarchy_origin_success/http-response.adoc[]
+include::{snippets}/create-comment_HierarchyOrigin_success/http-response.adoc[]
 
 ===== Response Sample 2: 댓글 생성 성공 > 원글에 대한 댓글
-include::{snippets}/create-comment_hierarchy_reply_for_origin_success/http-response.adoc[]
+include::{snippets}/create-comment_HierarchyReplyForOrigin_success/http-response.adoc[]
 
 ===== Response Sample 3: 댓글 생성 성공 > 댓글에 대한 댓글
-include::{snippets}/create-comment_hierarchy_reply_for_reply_success/http-response.adoc[]
+include::{snippets}/create-comment_HierarchyReplyForReply_success/http-response.adoc[]
 
 
 
