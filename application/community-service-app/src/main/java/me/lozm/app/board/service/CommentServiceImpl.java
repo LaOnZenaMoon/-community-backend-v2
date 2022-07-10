@@ -65,38 +65,6 @@ public class CommentServiceImpl extends HierarchyService<Comment> implements Com
         comment.updateIsUse(false);
     }
 
-    private Integer getMaxGroupOrderWhenReplyForOrigin(Long parentCommentId) {
-        return commentRepository.findMaxGroupOrder(parentCommentId)
-                .orElseThrow(() -> new IllegalStateException(format("groupOrder 처리에 오류가 발생하였습니다. parentCommentId: %d", parentCommentId)));
-    }
-
-    private void increaseCommentsGroupOrderBehindCreatedComment(Comment parentComment, Integer maxGroupOrder) {
-        List<Comment> commentList = commentRepository.findAllByHierarchy_CommonParentId(parentComment.getHierarchy().getCommonParentId());
-        for (Comment comment1 : commentList) {
-            if (comment1.getHierarchy().getGroupOrder() > maxGroupOrder + 1) {
-                comment1.getHierarchy().increaseGroupOrder();
-            }
-        }
-    }
-
-    private Integer getMaxGroupOrderWhenReplyForReply(Comment parentComment) {
-        final Long commonParentId = parentComment.getHierarchy().getCommonParentId();
-        final Long parentId = parentComment.getHierarchy().getParentId();
-
-        Optional<Integer> maxGroupOrderOptional1 = commentRepository.findMaxGroupOrder(commonParentId, parentComment.getId());
-        if (maxGroupOrderOptional1.isPresent()) {
-            return maxGroupOrderOptional1.get();
-        }
-
-        Optional<Integer> maxGroupOrderOptional2 = commentRepository.findMaxGroupOrder(commonParentId, parentId);
-        if (maxGroupOrderOptional2.isPresent()) {
-            return maxGroupOrderOptional2.get();
-        }
-
-        throw new IllegalStateException(format("댓글 groupOrder 처리에 오류가 발생하였습니다. commonParentId: %d, parentId: %d"
-                , commonParentId, parentId));
-    }
-
     @Override
     protected <T extends HierarchyRequestAble> void updateEntityWhenHierarchyTypeIsOrigin(Comment entity, T request) {
         entity.getHierarchy().update(entity.getId());
@@ -131,6 +99,38 @@ public class CommentServiceImpl extends HierarchyService<Comment> implements Com
     @Override
     protected <R> R createResponse(Comment entity) {
         return (R) commentMapper.toDetailVo(entity);
+    }
+
+    private Integer getMaxGroupOrderWhenReplyForOrigin(Long parentCommentId) {
+        return commentRepository.findMaxGroupOrder(parentCommentId)
+                .orElseThrow(() -> new IllegalStateException(format("groupOrder 처리에 오류가 발생하였습니다. parentCommentId: %d", parentCommentId)));
+    }
+
+    private void increaseCommentsGroupOrderBehindCreatedComment(Comment parentComment, Integer maxGroupOrder) {
+        List<Comment> commentList = commentRepository.findAllByHierarchy_CommonParentId(parentComment.getHierarchy().getCommonParentId());
+        for (Comment comment : commentList) {
+            if (comment.getHierarchy().getGroupOrder() > maxGroupOrder + 1) {
+                comment.getHierarchy().increaseGroupOrder();
+            }
+        }
+    }
+
+    private Integer getMaxGroupOrderWhenReplyForReply(Comment parentComment) {
+        final Long commonParentId = parentComment.getHierarchy().getCommonParentId();
+        final Long parentId = parentComment.getHierarchy().getParentId();
+
+        Optional<Integer> maxGroupOrderOptional1 = commentRepository.findMaxGroupOrder(commonParentId, parentComment.getId());
+        if (maxGroupOrderOptional1.isPresent()) {
+            return maxGroupOrderOptional1.get();
+        }
+
+        Optional<Integer> maxGroupOrderOptional2 = commentRepository.findMaxGroupOrder(commonParentId, parentId);
+        if (maxGroupOrderOptional2.isPresent()) {
+            return maxGroupOrderOptional2.get();
+        }
+
+        throw new IllegalStateException(format("댓글 groupOrder 처리에 오류가 발생하였습니다. commonParentId: %d, parentId: %d"
+                , commonParentId, parentId));
     }
 
 }

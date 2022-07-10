@@ -44,7 +44,7 @@ public class Board extends BaseEntity {
             @AttributeOverride(name = "commonParentId", column = @Column(name = "COMMON_PARENT_BOARD_ID")),
             @AttributeOverride(name = "parentId", column = @Column(name = "PARENT_BOARD_ID"))
     })
-    private HierarchicalEntity hierarchicalBoard;
+    private HierarchicalEntity hierarchy = new HierarchicalEntity();
 
     @Column(name = "BOARD_TYPE")
     @Convert(converter = BoardTypeConverter.class)

@@ -7,9 +7,6 @@ import me.lozm.domain.board.vo.QBoardPageVo_Element;
 import me.lozm.global.querydsl.Querydsl4RepositorySupport;
 import org.springframework.data.domain.Page;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 public class BoardRepositoryImpl extends Querydsl4RepositorySupport<Board> implements BoardRepositoryCustom {
 
     public BoardRepositoryImpl() {
@@ -22,7 +19,7 @@ public class BoardRepositoryImpl extends Querydsl4RepositorySupport<Board> imple
         return applyPagination(requestVo.getPageQueryParameters().getPageRequest(), query ->
                 select(new QBoardPageVo_Element(
                         QBoard.board.id,
-                        QBoard.board.hierarchicalBoard,
+                        QBoard.board.hierarchy,
                         QBoard.board.boardType,
                         QBoard.board.contentType,
                         QBoard.board.viewCount,
@@ -30,6 +27,7 @@ public class BoardRepositoryImpl extends Querydsl4RepositorySupport<Board> imple
                         QBoard.board.content
                         ))
                         .from(QBoard.board)
+                        .orderBy(QBoard.board.hierarchy.commonParentId.desc(), QBoard.board.hierarchy.groupOrder.asc())
         );
     }
 

@@ -16,7 +16,7 @@ public class BoardDetailDto {
     @AllArgsConstructor
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class Response {
-        private final HierarchyResponseAble hierarchicalBoard;
+        private final HierarchyResponseAble hierarchy;
         private final Long boardId;
         private final BoardType boardType;
         private final ContentType contentType;

@@ -38,16 +38,28 @@ include::{snippets}/get-board-detail_success/http-response.adoc[]
 게시글 생성
 
 ===== Request Body Fields
-include::{snippets}/create-board_success/request-fields.adoc[]
+include::{snippets}/create-board_hierarchy-origin_success/request-fields.adoc[]
 
-===== Request Sample
-include::{snippets}/create-board_success/http-request.adoc[]
+===== Request Sample 1: 게시글 생성 성공 > 원글
+include::{snippets}/create-board_hierarchy-origin_success/http-request.adoc[]
+
+===== Request Sample 2: 게시글 생성 성공 > 원글에 대한 댓글
+include::{snippets}/create-board_hierarchy-reply-for-origin_success/http-request.adoc[]
+
+===== Request Sample 3: 게시글 생성 성공 > 댓글에 대한 댓글
+include::{snippets}/create-board_hierarchy-reply-for-reply_success/http-request.adoc[]
 
 ===== Response Body Fields
-include::{snippets}/create-board_success/response-fields.adoc[]
+include::{snippets}/create-board_hierarchy-origin_success/response-fields.adoc[]
 
-===== Response Sample
-include::{snippets}/create-board_success/http-response.adoc[]
+===== Response Sample 1: 게시글 생성 성공 > 원글
+include::{snippets}/create-board_hierarchy-origin_success/http-response.adoc[]
+
+===== Response Sample 2: 게시글 생성 성공 > 원글에 대한 댓글
+include::{snippets}/create-board_hierarchy-reply-for-origin_success/http-response.adoc[]
+
+===== Response Sample 3: 게시글 생성 성공 > 댓글에 대한 댓글
+include::{snippets}/create-board_hierarchy-reply-for-reply_success/http-response.adoc[]
 
 
 
