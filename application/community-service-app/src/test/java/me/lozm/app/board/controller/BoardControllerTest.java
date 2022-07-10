@@ -7,6 +7,7 @@ import me.lozm.domain.board.service.BoardHelperService;
 import me.lozm.domain.board.vo.BoardDetailVo;
 import me.lozm.global.code.BoardType;
 import me.lozm.global.code.ContentType;
+import me.lozm.global.code.HierarchyType;
 import me.lozm.global.documentation.BaseDocumentationTest;
 import me.lozm.global.documentation.DocumentationUtils;
 import org.junit.jupiter.api.DisplayName;
@@ -94,9 +95,9 @@ class BoardControllerTest extends BaseDocumentationTest {
         assertEquals(viewCount + 1, board.getViewCount());
     }
 
-    @DisplayName("게시글 생성 성공")
+    @DisplayName("게시글 생성 성공 > 원글")
     @Test
-    void createBoard_success() throws Exception {
+    void createBoard_hierarchyOrigin_success() throws Exception {
         // Given
         final Faker faker = new Faker();
 
@@ -125,6 +126,8 @@ class BoardControllerTest extends BaseDocumentationTest {
                 .andExpect(status().is2xxSuccessful())
                 .andDo(this.documentationHandler.document(
                         requestFields(
+                                fieldWithPath("hierarchyType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("생성할 게시글 계층 유형", HierarchyType.class)).optional(),
+                                fieldWithPath("parentId").type(JsonFieldType.NUMBER).description("생성할 게시글에 대한 상위 댓글 ID").optional(),
                                 fieldWithPath("boardType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("게시글 유형", BoardType.class)),
                                 fieldWithPath("contentType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("게시글 내용 유형", ContentType.class)),
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("제목"),
@@ -141,6 +144,102 @@ class BoardControllerTest extends BaseDocumentationTest {
 //        assertEquals(contentType, responseDto.getContentType());
 //        assertEquals(title, responseDto.getTitle());
 //        assertEquals(content, responseDto.getContent());
+    }
+
+    @DisplayName("게시글 생성 성공 > 원글에 대한 댓글")
+    @Test
+    void createBoard_hierarchyReplyForOrigin_success() throws Exception {
+        // Given
+        BoardDetailVo.Response boardDetailVo_origin = createBoard(BoardType.NEWS, ContentType.GENERAL, boardService);
+
+        final Faker faker = new Faker();
+
+        final BoardType boardType = BoardType.MARKET;
+        final ContentType contentType = ContentType.NOTICE;
+        final String title = faker.book().title();
+        final String content = faker.lorem().sentence(10);
+
+        final String requestBody = "{\n" +
+                "  \"hierarchyType\": \"" + HierarchyType.REPLY_FOR_ORIGIN + "\",\n" +
+                "  \"parentId\": " + boardDetailVo_origin.getBoardId() + ",\n" +
+                "  \"boardType\": \"" + boardType + "\",\n" +
+                "  \"contentType\": \"" + contentType + "\",\n" +
+                "  \"title\": \"" + title + "\",\n" +
+                "  \"content\": \"" + content + "\"\n" +
+                "}";
+
+        // When
+        ResultActions resultActions = mockMvc.perform(
+                RestDocumentationRequestBuilders.post("/boards")
+                        .header(HttpHeaders.AUTHORIZATION, DocumentationUtils.getAccessToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody)
+        );
+
+        // Then
+        resultActions.andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andDo(this.documentationHandler.document(
+                        requestFields(
+                                fieldWithPath("hierarchyType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("생성할 게시글 계층 유형", HierarchyType.class)).optional(),
+                                fieldWithPath("parentId").type(JsonFieldType.NUMBER).description("생성할 게시글에 대한 상위 댓글 ID").optional(),
+                                fieldWithPath("boardType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("게시글 유형", BoardType.class)),
+                                fieldWithPath("contentType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("게시글 내용 유형", ContentType.class)),
+                                fieldWithPath("title").type(JsonFieldType.STRING).description("제목"),
+                                fieldWithPath("content").type(JsonFieldType.STRING).description("내용")
+                        ),
+                        responseFields(DocumentationUtils.getSuccessDefaultResponse())
+                                .andWithPrefix(PREFIX_DATA, getBoardDetailResponseDto())
+                ));
+    }
+
+    @DisplayName("게시글 생성 성공 > 댓글에 대한 댓글")
+    @Test
+    void createBoard_hierarchyReplyForReply_success() throws Exception {
+        // Given
+        BoardDetailVo.Response boardDetailVo_origin = createBoard(BoardType.NEWS, ContentType.GENERAL, boardService);
+
+        BoardDetailVo.Response boardDetailVo_reply_for_origin = createBoard(HierarchyType.REPLY_FOR_ORIGIN, boardDetailVo_origin.getBoardId(), BoardType.NEWS, ContentType.GENERAL, boardService);
+
+        final Faker faker = new Faker();
+
+        final BoardType boardType = BoardType.MARKET;
+        final ContentType contentType = ContentType.NOTICE;
+        final String title = faker.book().title();
+        final String content = faker.lorem().sentence(10);
+
+        final String requestBody = "{\n" +
+                "  \"hierarchyType\": \"" + HierarchyType.REPLY_FOR_REPLY + "\",\n" +
+                "  \"parentId\": " + boardDetailVo_reply_for_origin.getBoardId() + ",\n" +
+                "  \"boardType\": \"" + boardType + "\",\n" +
+                "  \"contentType\": \"" + contentType + "\",\n" +
+                "  \"title\": \"" + title + "\",\n" +
+                "  \"content\": \"" + content + "\"\n" +
+                "}";
+
+        // When
+        ResultActions resultActions = mockMvc.perform(
+                RestDocumentationRequestBuilders.post("/boards")
+                        .header(HttpHeaders.AUTHORIZATION, DocumentationUtils.getAccessToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody)
+        );
+
+        // Then
+        resultActions.andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andDo(this.documentationHandler.document(
+                        requestFields(
+                                fieldWithPath("hierarchyType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("생성할 게시글 계층 유형", HierarchyType.class)).optional(),
+                                fieldWithPath("parentId").type(JsonFieldType.NUMBER).description("생성할 게시글에 대한 상위 댓글 ID").optional(),
+                                fieldWithPath("boardType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("게시글 유형", BoardType.class)),
+                                fieldWithPath("contentType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("게시글 내용 유형", ContentType.class)),
+                                fieldWithPath("title").type(JsonFieldType.STRING).description("제목"),
+                                fieldWithPath("content").type(JsonFieldType.STRING).description("내용")
+                        ),
+                        responseFields(DocumentationUtils.getSuccessDefaultResponse())
+                                .andWithPrefix(PREFIX_DATA, getBoardDetailResponseDto())
+                ));
     }
 
     @DisplayName("게시글 수정 성공")

@@ -15,7 +15,7 @@ public class BoardDetailVo {
     @AllArgsConstructor
     public static class Response {
         private final Long boardId;
-        private final HierarchyResponseAble hierarchicalBoard;
+        private final HierarchyResponseAble hierarchy;
         private final BoardType boardType;
         private final ContentType contentType;
         private final Long viewCount;

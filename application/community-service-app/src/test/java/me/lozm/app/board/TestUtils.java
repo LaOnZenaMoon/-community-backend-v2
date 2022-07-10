@@ -20,6 +20,20 @@ public class TestUtils {
     public static BoardDetailVo.Response createBoard(BoardType boardType, ContentType contentType, BoardService boardService) {
         final Faker faker = new Faker();
         return boardService.createBoard(BoardCreateVo.Request.builder()
+                .hierarchyType(HierarchyType.ORIGIN)
+                .parentId(null)
+                .boardType(boardType)
+                .contentType(contentType)
+                .title(faker.book().title())
+                .content(faker.lorem().sentence())
+                .build());
+    }
+
+    public static BoardDetailVo.Response createBoard(HierarchyType hierarchyType, Long parentId, BoardType boardType, ContentType contentType, BoardService boardService) {
+        final Faker faker = new Faker();
+        return boardService.createBoard(BoardCreateVo.Request.builder()
+                .hierarchyType(hierarchyType)
+                .parentId(parentId)
                 .boardType(boardType)
                 .contentType(contentType)
                 .title(faker.book().title())
