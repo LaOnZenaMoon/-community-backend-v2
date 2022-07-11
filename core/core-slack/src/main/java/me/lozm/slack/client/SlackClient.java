@@ -1,5 +1,6 @@
 package me.lozm.slack.client;
 
+import feign.Response;
 import me.lozm.slack.vo.SlackMessageVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,6 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface SlackClient {
 
     @PostMapping
-    String sendMessage(@RequestBody SlackMessageVo slackMessageVo);
+    Response sendMessage(@RequestBody SlackMessageVo slackMessageVo);
 
 }

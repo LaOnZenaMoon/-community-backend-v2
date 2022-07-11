@@ -19,6 +19,6 @@ public class SlackAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
             return;
         }
 
-        slackWebhookService.send(new SlackMessageVo(eventObject.getFormattedMessage()));
+        slackWebhookService.send(SlackMessageVo.from(eventObject.getFormattedMessage()));
     }
 }
