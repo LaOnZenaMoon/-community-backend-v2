@@ -7,3 +7,7 @@ feign:
         readTimeout: 20000
   slack-client:
     url: none
+
+logging:
+  level:
+    me.lozm.slack.client.SlackClient: DEBUG

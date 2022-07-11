@@ -1,3 +1,3 @@
 feign:
   slack-client:
-    url: https://hooks.slack.com/services/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
+    url: none # Set up your Slack incoming webhook URL
