@@ -17,4 +17,6 @@ dependencies {
     // Spring REST Docs
     api 'org.springframework.restdocs:spring-restdocs-mockmvc'
     api 'com.github.javafaker:javafaker:0.12'
+
+    api 'org.springframework.cloud:spring-cloud-starter-openfeign'
 }

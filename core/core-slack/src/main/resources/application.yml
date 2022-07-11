@@ -1,0 +1,9 @@
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: FULL
+        connectTimeout: 10000
+        readTimeout: 20000
+  slack-client:
+    url: none

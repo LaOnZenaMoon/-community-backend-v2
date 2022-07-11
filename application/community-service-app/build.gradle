@@ -5,10 +5,10 @@ plugins {
 dependencies {
     implementation project(':core:core-utils')
     implementation project(':core:core-web')
+    implementation project(':core:core-slack')
 
     implementation project(':domain:domain-rds')
 
-    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
 
     testImplementation files(project(':core:core-web').sourceSets.test.output.classesDirs)

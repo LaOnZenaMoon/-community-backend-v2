@@ -7,5 +7,6 @@ include('application:community-auth-app')
 
 include('core:core-utils')
 include('core:core-web')
+include('core:core-slack')
 
 include('domain:domain-rds')
