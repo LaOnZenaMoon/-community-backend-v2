@@ -23,7 +23,7 @@ Content-Type: application/json
 
 > {%
 client.test("Request executed successfully", function() {
-  client.assert(response.status == 200, "Response status is wrong");
+  client.assert(response.status == 201, "Response status is wrong");
 });
 client.global.set("BOARD_ID", response.body.data.boardId);
 %}
@@ -42,7 +42,7 @@ Content-Type: application/json
 
 > {%
 client.test("Request executed successfully", function() {
-  client.assert(response.status == 200, "Response status is wrong");
+  client.assert(response.status == 201, "Response status is wrong");
 });
 client.global.set("BOARD_ID", response.body.data.boardId);
 %}
@@ -61,7 +61,7 @@ Content-Type: application/json
 
 > {%
 client.test("Request executed successfully", function() {
-  client.assert(response.status == 200, "Response status is wrong");
+  client.assert(response.status == 201, "Response status is wrong");
 });
 client.global.set("BOARD_ID", response.body.data.boardId);
 %}
@@ -82,7 +82,7 @@ Content-Type: application/json
 
 > {%
 client.test("Request executed successfully", function() {
-  client.assert(response.status == 200, "Response status is wrong");
+  client.assert(response.status == 201, "Response status is wrong");
 });
 client.global.set("BOARD_ID_FOR_REPLY_FOR_ORIGIN", response.body.data.boardId);
 %}
@@ -103,7 +103,7 @@ Content-Type: application/json
 
 > {%
 client.test("Request executed successfully", function() {
-  client.assert(response.status == 200, "Response status is wrong");
+  client.assert(response.status == 201, "Response status is wrong");
 });
 client.global.set("BOARD_ID_FOR_REPLY_FOR_REPLY", response.body.data.boardId);
 %}
@@ -122,7 +122,7 @@ Content-Type: application/json
 
 > {%
 client.test("Request executed successfully", function() {
-  client.assert(response.status == 200, "Response status is wrong");
+  client.assert(response.status == 201, "Response status is wrong");
 });
 client.global.set("BOARD_ID", response.body.data.boardId);
 %}
@@ -143,7 +143,7 @@ Content-Type: application/json
 
 > {%
 client.test("Request executed successfully", function() {
-  client.assert(response.status == 200, "Response status is wrong");
+  client.assert(response.status == 201, "Response status is wrong");
 });
 client.global.set("BOARD_ID_FOR_REPLY_FOR_ORIGIN", response.body.data.boardId);
 %}
@@ -164,7 +164,7 @@ Content-Type: application/json
 
 > {%
 client.test("Request executed successfully", function() {
-  client.assert(response.status == 200, "Response status is wrong");
+  client.assert(response.status == 201, "Response status is wrong");
 });
 client.global.set("BOARD_ID_FOR_REPLY_FOR_ORIGIN", response.body.data.boardId);
 %}
@@ -185,7 +185,7 @@ Content-Type: application/json
 
 > {%
 client.test("Request executed successfully", function() {
-  client.assert(response.status == 200, "Response status is wrong");
+  client.assert(response.status == 201, "Response status is wrong");
 });
 client.global.set("BOARD_ID_FOR_REPLY_FOR_ORIGIN", response.body.data.boardId);
 %}
@@ -206,7 +206,7 @@ Content-Type: application/json
 
 > {%
 client.test("Request executed successfully", function() {
-  client.assert(response.status == 200, "Response status is wrong");
+  client.assert(response.status == 201, "Response status is wrong");
 });
 client.global.set("BOARD_ID_FOR_REPLY_FOR_REPLY", response.body.data.boardId);
 %}
@@ -227,7 +227,7 @@ Content-Type: application/json
 
 > {%
 client.test("Request executed successfully", function() {
-  client.assert(response.status == 200, "Response status is wrong");
+  client.assert(response.status == 201, "Response status is wrong");
 });
 client.global.set("BOARD_ID_FOR_REPLY_FOR_REPLY", response.body.data.boardId);
 %}
@@ -248,7 +248,7 @@ Content-Type: application/json
 
 > {%
 client.test("Request executed successfully", function() {
-  client.assert(response.status == 200, "Response status is wrong");
+  client.assert(response.status == 201, "Response status is wrong");
 });
 client.global.set("BOARD_ID_FOR_REPLY_FOR_REPLY", response.body.data.boardId);
 %}
@@ -269,7 +269,7 @@ Content-Type: application/json
 
 > {%
 client.test("Request executed successfully", function() {
-  client.assert(response.status == 200, "Response status is wrong");
+  client.assert(response.status == 201, "Response status is wrong");
 });
 client.global.set("BOARD_ID_FOR_REPLY_FOR_REPLY", response.body.data.boardId);
 %}
@@ -290,7 +290,7 @@ Content-Type: application/json
 
 > {%
 client.test("Request executed successfully", function() {
-  client.assert(response.status == 200, "Response status is wrong");
+  client.assert(response.status == 201, "Response status is wrong");
 });
 client.global.set("BOARD_ID_FOR_REPLY_FOR_ORIGIN", response.body.data.boardId);
 %}
@@ -309,7 +309,7 @@ Content-Type: application/json
 
 > {%
 client.test("Request executed successfully", function() {
-  client.assert(response.status == 200, "Response status is wrong");
+  client.assert(response.status == 201, "Response status is wrong");
 });
 client.global.set("BOARD_ID", response.body.data.boardId);
 %}
@@ -328,7 +328,7 @@ Content-Type: application/json
 
 > {%
 client.test("Request executed successfully", function() {
-  client.assert(response.status == 200, "Response status is wrong");
+  client.assert(response.status == 201, "Response status is wrong");
 });
 client.global.set("BOARD_ID", response.body.data.boardId);
 %}
@@ -349,7 +349,7 @@ Content-Type: application/json
 
 > {%
 client.test("Request executed successfully", function() {
-  client.assert(response.status == 200, "Response status is wrong");
+  client.assert(response.status == 201, "Response status is wrong");
 });
 client.global.set("BOARD_ID_FOR_REPLY_FOR_ORIGIN", response.body.data.boardId);
 %}
@@ -368,7 +368,7 @@ Content-Type: application/json
 
 > {%
 client.test("Request executed successfully", function() {
-  client.assert(response.status == 200, "Response status is wrong");
+  client.assert(response.status == 201, "Response status is wrong");
 });
 client.global.set("BOARD_ID", response.body.data.boardId);
 %}

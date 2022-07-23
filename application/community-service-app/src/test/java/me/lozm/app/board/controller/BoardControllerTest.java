@@ -58,7 +58,7 @@ class BoardControllerTest extends BaseDocumentationTest {
 
         // Then
         resultActions.andDo(print())
-                .andExpect(status().is2xxSuccessful())
+                .andExpect(status().isOk())
                 .andDo(this.documentationHandler.document(
                         DocumentationUtils.getPageParameters(),
                         responseFields(DocumentationUtils.getSuccessDefaultResponse())
@@ -83,7 +83,7 @@ class BoardControllerTest extends BaseDocumentationTest {
 
         // Then
         resultActions.andDo(print())
-                .andExpect(status().is2xxSuccessful())
+                .andExpect(status().isOk())
                 .andDo(this.documentationHandler.document(
                         pathParameters(parameterWithName("boardId").description("게시글 ID")),
                         responseFields(DocumentationUtils.getSuccessDefaultResponse())
@@ -123,7 +123,7 @@ class BoardControllerTest extends BaseDocumentationTest {
 
         // Then
         resultActions.andDo(print())
-                .andExpect(status().is2xxSuccessful())
+                .andExpect(status().isCreated())
                 .andDo(this.documentationHandler.document(
                         requestFields(
                                 fieldWithPath("hierarchyType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("생성할 게시글 계층 유형", HierarchyType.class)).optional(),
@@ -178,7 +178,7 @@ class BoardControllerTest extends BaseDocumentationTest {
 
         // Then
         resultActions.andDo(print())
-                .andExpect(status().is2xxSuccessful())
+                .andExpect(status().isCreated())
                 .andDo(this.documentationHandler.document(
                         requestFields(
                                 fieldWithPath("hierarchyType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("생성할 게시글 계층 유형", HierarchyType.class)).optional(),
@@ -227,7 +227,7 @@ class BoardControllerTest extends BaseDocumentationTest {
 
         // Then
         resultActions.andDo(print())
-                .andExpect(status().is2xxSuccessful())
+                .andExpect(status().isCreated())
                 .andDo(this.documentationHandler.document(
                         requestFields(
                                 fieldWithPath("hierarchyType").type(JsonFieldType.STRING).description(DocumentationUtils.getAllOfEnumElementNames("생성할 게시글 계층 유형", HierarchyType.class)).optional(),
@@ -271,7 +271,7 @@ class BoardControllerTest extends BaseDocumentationTest {
 
         // Then
         resultActions.andDo(print())
-                .andExpect(status().is2xxSuccessful())
+                .andExpect(status().isOk())
                 .andDo(this.documentationHandler.document(
                         pathParameters(parameterWithName("boardId").description("게시글 ID")),
                         requestFields(
@@ -307,7 +307,7 @@ class BoardControllerTest extends BaseDocumentationTest {
 
         // Then
         resultActions.andDo(print())
-                .andExpect(status().is2xxSuccessful())
+                .andExpect(status().isOk())
                 .andDo(this.documentationHandler.document(
                         pathParameters(parameterWithName("boardId").description("게시글 ID")),
                         responseFields(DocumentationUtils.getSuccessDefaultResponse())

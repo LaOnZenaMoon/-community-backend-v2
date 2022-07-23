@@ -66,7 +66,7 @@ class CommentControllerTest extends BaseDocumentationTest {
 
         // Then
         resultActions.andDo(print())
-                .andExpect(status().is2xxSuccessful())
+                .andExpect(status().isOk())
                 .andDo(this.documentationHandler.document(
                         pathParameters(parameterWithName("boardId").description("게시글 ID")),
                         DocumentationUtils.getPageParameters(),
@@ -102,7 +102,7 @@ class CommentControllerTest extends BaseDocumentationTest {
 
         // Then
         resultActions.andDo(print())
-                .andExpect(status().is2xxSuccessful())
+                .andExpect(status().isCreated())
                 .andDo(this.documentationHandler.document(
                         pathParameters(parameterWithName("boardId").description("게시글 ID")),
                         requestFields(
@@ -146,7 +146,7 @@ class CommentControllerTest extends BaseDocumentationTest {
 
         // Then
         resultActions.andDo(print())
-                .andExpect(status().is2xxSuccessful())
+                .andExpect(status().isCreated())
                 .andDo(this.documentationHandler.document(
                         pathParameters(parameterWithName("boardId").description("게시글 ID")),
                         requestFields(
@@ -192,7 +192,7 @@ class CommentControllerTest extends BaseDocumentationTest {
 
         // Then
         resultActions.andDo(print())
-                .andExpect(status().is2xxSuccessful())
+                .andExpect(status().isCreated())
                 .andDo(this.documentationHandler.document(
                         pathParameters(parameterWithName("boardId").description("게시글 ID")),
                         requestFields(
@@ -235,7 +235,7 @@ class CommentControllerTest extends BaseDocumentationTest {
 
         // Then
         resultActions.andDo(print())
-                .andExpect(status().is2xxSuccessful())
+                .andExpect(status().isOk())
                 .andDo(this.documentationHandler.document(
                         pathParameters(
                                 parameterWithName("boardId").description("게시글 ID"),
@@ -271,7 +271,7 @@ class CommentControllerTest extends BaseDocumentationTest {
 
         // Then
         resultActions.andDo(print())
-                .andExpect(status().is2xxSuccessful())
+                .andExpect(status().isOk())
                 .andDo(this.documentationHandler.document(
                         pathParameters(
                                 parameterWithName("boardId").description("게시글 ID"),

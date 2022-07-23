@@ -15,6 +15,7 @@ import me.lozm.global.model.CommonResponseDto;
 import me.lozm.global.model.dto.CommonPageResponseDto;
 import me.lozm.global.model.dto.PageQueryParameters;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,41 +32,41 @@ public class CommentController {
 
 
     @GetMapping
-    public CommonResponseDto<CommonPageResponseDto<CommentPageDto.Response>> getComments(PageQueryParameters pageQueryParameters,
-                                                                                         @PathVariable("boardId") Long boardId) {
+    public ResponseEntity<CommonResponseDto<CommonPageResponseDto<CommentPageDto.Response>>> getComments(PageQueryParameters pageQueryParameters,
+                                                                                                         @PathVariable("boardId") Long boardId) {
 
         CommentPageVo.Request requestVo = commentMapper.toPageVo(boardId, pageQueryParameters);
         Page<CommentPageVo.Element> responsePageVo = commentService.getComments(requestVo);
 
         List<CommentPageDto.Response> responseDtoList = responsePageVo.getContent().stream().map(commentMapper::toPageDto).collect(Collectors.toList());
-        return CommonResponseDto.success(new CommonPageResponseDto<>(responsePageVo, responseDtoList));
+        return CommonResponseDto.ok(new CommonPageResponseDto<>(responsePageVo, responseDtoList));
     }
 
     @PostMapping
-    public CommonResponseDto<CommentDetailDto.Response> createComment(@RequestBody @Validated CommentCreateDto.Request requestDto,
-                                                                      @PathVariable("boardId") Long boardId) {
+    public ResponseEntity<CommonResponseDto<CommentDetailDto.Response>> createComment(@RequestBody @Validated CommentCreateDto.Request requestDto,
+                                                                                      @PathVariable("boardId") Long boardId) {
 
         CommentCreateVo.Request commentCreateVo = commentMapper.toCreateVo(boardId, requestDto);
         CommentDetailVo.Response commentDetailVo = commentService.createComment(commentCreateVo);
         CommentDetailDto.Response responseDto = commentMapper.toDetailDto(commentDetailVo);
-        return CommonResponseDto.success(responseDto);
+        return CommonResponseDto.created(responseDto);
     }
 
     @PutMapping("{commentId}")
-    public CommonResponseDto<CommentDetailDto.Response> updateComment(@RequestBody @Validated CommentUpdateDto.Request requestDto,
-                                                                      @PathVariable("boardId") Long boardId,
-                                                                      @PathVariable("commentId") Long commentId) {
+    public ResponseEntity<CommonResponseDto<CommentDetailDto.Response>> updateComment(@RequestBody @Validated CommentUpdateDto.Request requestDto,
+                                                                                      @PathVariable("boardId") Long boardId,
+                                                                                      @PathVariable("commentId") Long commentId) {
 
         CommentUpdateVo.Request commentUpdateVo = commentMapper.toUpdateVo(boardId, commentId, requestDto);
         CommentDetailVo.Response commentDetailVo = commentService.updateComment(commentUpdateVo);
         CommentDetailDto.Response responseDto = commentMapper.toDetailDto(commentDetailVo);
-        return CommonResponseDto.success(responseDto);
+        return CommonResponseDto.ok(responseDto);
     }
 
     @DeleteMapping("{commentId}")
-    public CommonResponseDto deleteComment(@PathVariable("boardId") Long boardId, @PathVariable("commentId") Long commentId) {
+    public ResponseEntity<CommonResponseDto<Object>> deleteComment(@PathVariable("boardId") Long boardId, @PathVariable("commentId") Long commentId) {
         commentService.deleteComment(boardId, commentId);
-        return CommonResponseDto.success();
+        return CommonResponseDto.ok();
     }
 
 }

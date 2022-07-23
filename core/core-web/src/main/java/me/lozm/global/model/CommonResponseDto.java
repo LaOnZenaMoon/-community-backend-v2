@@ -37,52 +37,102 @@ public class CommonResponseDto<T> {
         this.responseDateTime = LocalDateTime.now();
     }
 
-    public static CommonResponseDto success() {
-        return CommonResponseDto.builder()
+    public static <T> ResponseEntity<CommonResponseDto<T>> ok() {
+        CommonResponseDto<T> responseDto = CommonResponseDto.<T>builder()
+                .code(HttpStatus.OK.name())
                 .build();
+        return getOkResponseEntity(responseDto);
     }
 
-    public static CommonResponseDto success(Object object) {
-        return CommonResponseDto.builder()
+    public static <T> ResponseEntity<CommonResponseDto<T>> ok(T object) {
+        CommonResponseDto<T> responseDto = CommonResponseDto.<T>builder()
+                .code(HttpStatus.OK.name())
                 .data(object)
                 .build();
+        return getOkResponseEntity(responseDto);
     }
 
-    public static ResponseEntity<Object> badRequest(String message) {
-        CommonResponseDto<Object> response = CommonResponseDto.builder()
+    public static <T> ResponseEntity<CommonResponseDto<T>> created() {
+        CommonResponseDto<T> responseDto = CommonResponseDto.<T>builder()
+                .code(HttpStatus.CREATED.name())
+                .build();
+        return getCreatedResponseEntity(responseDto);
+    }
+
+    public static <T> ResponseEntity<CommonResponseDto<T>> created(T object) {
+        CommonResponseDto<T> responseDto = CommonResponseDto.<T>builder()
+                .code(HttpStatus.CREATED.name())
+                .data(object)
+                .build();
+        return getCreatedResponseEntity(responseDto);
+    }
+
+    public static <T> ResponseEntity<CommonResponseDto<T>> badRequest(String message) {
+        CommonResponseDto<T> response = CommonResponseDto.<T>builder()
                 .code(CustomExceptionType.INVALID_REQUEST_PARAMETERS.getCode())
                 .message(isEmpty(message) ? CustomExceptionType.INVALID_REQUEST_PARAMETERS.getMessage() : message)
                 .build();
-        return getObjectResponseEntity(response);
+        return getBadRequestResponseEntity(response);
     }
-    public static ResponseEntity<Object> badRequest(CustomExceptionType type, String additionalMessage) {
-        CommonResponseDto<Object> response = CommonResponseDto.builder()
+
+    public static <T> ResponseEntity<CommonResponseDto<T>> badRequest(CustomExceptionType type, String additionalMessage) {
+        CommonResponseDto<T> response = CommonResponseDto.<T>builder()
                 .code(type.getCode())
                 .message(isEmpty(additionalMessage) ? type.getMessage() : format("%s %s", type.getMessage(), additionalMessage))
                 .build();
-        return getObjectResponseEntity(response);
+        return getBadRequestResponseEntity(response);
     }
 
-    public static ResponseEntity<Object> badRequest(CustomExceptionType type, String message, Object data) {
-        CommonResponseDto<Object> response = CommonResponseDto.builder()
+    public static <T> ResponseEntity<CommonResponseDto<T>> badRequest(CustomExceptionType type, String message, T data) {
+        CommonResponseDto<T> response = CommonResponseDto.<T>builder()
                 .code(type.getCode())
                 .message(message)
                 .data(data)
                 .build();
-        return getObjectResponseEntity(response);
+        return getBadRequestResponseEntity(response);
     }
 
-    public static ResponseEntity<Object> badRequest(CustomExceptionType type, BindingResult bindingResult) {
-        CommonResponseDto<Object> response = CommonResponseDto.builder()
+    public static ResponseEntity<CommonResponseDto<List<FieldError>>> badRequest(CustomExceptionType type, BindingResult bindingResult) {
+        CommonResponseDto<List<FieldError>> response = CommonResponseDto.<List<FieldError>>builder()
                 .code(type.getCode())
                 .message(type.getMessage())
                 .data(FieldError.of(bindingResult))
                 .build();
-        return getObjectResponseEntity(response);
+        return getBadRequestResponseEntity(response);
     }
 
-    private static ResponseEntity<Object> getObjectResponseEntity(CommonResponseDto<Object> response) {
+    public static <T> ResponseEntity<CommonResponseDto<T>> internalServerError(String message) {
+        CommonResponseDto<T> response = CommonResponseDto.<T>builder()
+                .code(CustomExceptionType.INTERNAL_SERVER_ERROR.getCode())
+                .message(message)
+                .build();
+        return getInternalServerErrorResponseEntity(response);
+    }
+
+    public static <T> ResponseEntity<CommonResponseDto<T>> internalServerError(CustomExceptionType type) {
+        CommonResponseDto<T> response = CommonResponseDto.<T>builder()
+                .code(type.getCode())
+                .message(type.getMessage())
+                .build();
+        return getInternalServerErrorResponseEntity(response);
+    }
+
+    private static <T> ResponseEntity<CommonResponseDto<T>> getOkResponseEntity(CommonResponseDto<T> responseDto) {
+        return ResponseEntity.ok(responseDto);
+    }
+
+    private static <T> ResponseEntity<CommonResponseDto<T>> getCreatedResponseEntity(CommonResponseDto<T> responseDto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(responseDto);
+    }
+
+    private static <T> ResponseEntity<CommonResponseDto<T>> getBadRequestResponseEntity(CommonResponseDto<T> response) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(response);
+    }
+
+    private static <T> ResponseEntity<CommonResponseDto<T>> getInternalServerErrorResponseEntity(CommonResponseDto<T> response) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(response);
     }
 

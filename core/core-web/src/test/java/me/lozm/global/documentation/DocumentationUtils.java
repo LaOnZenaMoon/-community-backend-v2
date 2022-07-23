@@ -27,6 +27,7 @@ public class DocumentationUtils {
 
     public static List<FieldDescriptor> getSuccessDefaultResponse() {
         return List.of(
+                fieldWithPath("code").description("응답 코드값"),
                 fieldWithPath("responseDateTime").description("응답일시")
         );
     }
