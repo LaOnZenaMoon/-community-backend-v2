@@ -1,3 +1,7 @@
+plugins {
+    id 'org.springframework.boot' version "${springBootVersion}"
+}
+
 bootJar { enabled = false }
 jar { enabled = true }
 

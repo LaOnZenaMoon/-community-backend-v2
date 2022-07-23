@@ -1,10 +1,12 @@
+plugins {
+    id 'org.springframework.boot' version "${springBootVersion}"
+}
+
 jar.enabled(true)
 bootJar.enabled(false)
 
-buildscript {
-    ext {
-        queryDslVersion = "4.4.0"
-    }
+ext {
+    queryDslVersion = "4.4.0"
 }
 
 dependencies {
