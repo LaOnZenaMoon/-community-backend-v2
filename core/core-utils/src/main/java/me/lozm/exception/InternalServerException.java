@@ -12,6 +12,11 @@ public class InternalServerException extends RuntimeException {
         this.type = type;
     }
 
+    public InternalServerException(CustomExceptionType type, Throwable cause) {
+        super(type.getMessage(), cause);
+        this.type = type;
+    }
+
     public InternalServerException(CustomExceptionType type, String message) {
         super(message);
         this.type = type;

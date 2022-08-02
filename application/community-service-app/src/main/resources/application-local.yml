@@ -22,3 +22,6 @@ spring:
 feign:
   auth-client:
     url: http://localhost:8082
+
+file:
+  upload-path: upload
