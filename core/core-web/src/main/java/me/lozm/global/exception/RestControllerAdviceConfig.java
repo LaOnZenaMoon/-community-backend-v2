@@ -1,10 +1,10 @@
 package me.lozm.global.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import me.lozm.exception.BadRequestException;
+import me.lozm.exception.CustomExceptionType;
+import me.lozm.exception.InternalServerException;
 import me.lozm.global.model.CommonResponseDto;
-import me.lozm.utils.exception.BadRequestException;
-import me.lozm.utils.exception.CustomExceptionType;
-import me.lozm.utils.exception.InternalServerException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -4,7 +4,7 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.lozm.global.code.CommentType;
+import me.lozm.domain.board.code.CommentType;
 import me.lozm.global.model.HierarchyResponseAble;
 import me.lozm.global.model.dto.PageQueryParameters;
 import org.springframework.util.Assert;

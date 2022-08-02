@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import me.lozm.utils.exception.CustomExceptionType;
+import me.lozm.exception.CustomExceptionType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
-import static me.lozm.utils.exception.DateUtils.DATETIME_PATTERN;
+import static me.lozm.utils.DateUtils.DATETIME_PATTERN;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Slf4j

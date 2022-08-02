@@ -2,8 +2,8 @@ package me.lozm.global.documentation;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import me.lozm.utils.code.EnumModel;
-import me.lozm.utils.exception.CustomExceptionType;
+import me.lozm.code.EnumModel;
+import me.lozm.exception.CustomExceptionType;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.request.RequestParametersSnippet;

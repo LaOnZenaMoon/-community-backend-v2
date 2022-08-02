@@ -1,4 +1,4 @@
-package me.lozm.utils.exception;
+package me.lozm.exception;
 
 import lombok.Getter;
 

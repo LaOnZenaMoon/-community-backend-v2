@@ -1,13 +1,13 @@
 package me.lozm.app.board.service;
 
+import me.lozm.domain.board.code.BoardType;
+import me.lozm.domain.board.code.CommentType;
+import me.lozm.domain.board.code.ContentType;
 import me.lozm.domain.board.entity.Board;
 import me.lozm.domain.board.service.BoardHelperService;
 import me.lozm.domain.board.service.CommentHelperService;
 import me.lozm.domain.board.vo.BoardDetailVo;
 import me.lozm.domain.board.vo.CommentDetailVo;
-import me.lozm.global.code.BoardType;
-import me.lozm.global.code.CommentType;
-import me.lozm.global.code.ContentType;
 import me.lozm.global.code.HierarchyType;
 import me.lozm.global.model.HierarchyResponseAble;
 import org.junit.jupiter.api.DisplayName;

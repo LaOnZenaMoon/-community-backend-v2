@@ -1,4 +1,4 @@
-package me.lozm.utils.code;
+package me.lozm.code;
 
 public interface EnumModel {
     String getKey();

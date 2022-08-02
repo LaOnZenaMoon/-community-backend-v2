@@ -1,9 +1,9 @@
 package me.lozm.app.board.service;
 
+import me.lozm.exception.BadRequestException;
+import me.lozm.exception.CustomExceptionType;
 import me.lozm.global.code.HierarchyType;
 import me.lozm.global.model.HierarchyRequestAble;
-import me.lozm.utils.exception.BadRequestException;
-import me.lozm.utils.exception.CustomExceptionType;
 
 import java.util.function.Function;
 

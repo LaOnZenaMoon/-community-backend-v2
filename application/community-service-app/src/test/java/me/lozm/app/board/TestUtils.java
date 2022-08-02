@@ -5,13 +5,13 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import me.lozm.app.board.service.BoardService;
 import me.lozm.app.board.service.CommentService;
+import me.lozm.domain.board.code.BoardType;
+import me.lozm.domain.board.code.CommentType;
+import me.lozm.domain.board.code.ContentType;
 import me.lozm.domain.board.vo.BoardCreateVo;
 import me.lozm.domain.board.vo.BoardDetailVo;
 import me.lozm.domain.board.vo.CommentCreateVo;
 import me.lozm.domain.board.vo.CommentDetailVo;
-import me.lozm.global.code.BoardType;
-import me.lozm.global.code.CommentType;
-import me.lozm.global.code.ContentType;
 import me.lozm.global.code.HierarchyType;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

@@ -1,17 +1,17 @@
-package me.lozm.global.code.converter;
+package me.lozm.domain.board.code.converter;
 
 import lombok.extern.slf4j.Slf4j;
-import me.lozm.global.code.ContentType;
+import me.lozm.domain.board.code.CommentType;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 @Slf4j
 @Converter(autoApply = true)
-public class ContentTypeConverter implements AttributeConverter<ContentType, String> {
+public class CommentTypeConverter implements AttributeConverter<CommentType, String> {
 
     @Override
-    public String convertToDatabaseColumn(ContentType attribute) {
+    public String convertToDatabaseColumn(CommentType attribute) {
         if (attribute == null) {
             return null;
         }
@@ -20,9 +20,9 @@ public class ContentTypeConverter implements AttributeConverter<ContentType, Str
     }
 
     @Override
-    public ContentType convertToEntityAttribute(String dbData) {
+    public CommentType convertToEntityAttribute(String dbData) {
         try {
-            return ContentType.findCode(dbData);
+            return CommentType.findCode(dbData);
         } catch (Exception e) {
             log.warn(String.format("DB로 부터 알수 없는 상태값을 받았습니다. => %s", dbData));
             return null;

@@ -1,4 +1,4 @@
-package me.lozm.utils.exception;
+package me.lozm.utils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

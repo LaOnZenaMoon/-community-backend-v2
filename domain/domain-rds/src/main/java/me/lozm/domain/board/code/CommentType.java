@@ -1,4 +1,4 @@
-package me.lozm.global.code;
+package me.lozm.domain.board.code;
 
 import lombok.Getter;
 

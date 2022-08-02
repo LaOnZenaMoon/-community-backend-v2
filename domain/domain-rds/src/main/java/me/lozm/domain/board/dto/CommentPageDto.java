@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.lozm.global.code.CommentType;
+import me.lozm.domain.board.code.CommentType;
 import me.lozm.global.model.HierarchyResponseAble;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

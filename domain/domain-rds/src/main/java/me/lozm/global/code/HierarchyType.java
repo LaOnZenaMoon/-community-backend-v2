@@ -1,6 +1,6 @@
 package me.lozm.global.code;
 
-import me.lozm.utils.code.EnumModel;
+import me.lozm.code.EnumModel;
 
 public enum HierarchyType implements EnumModel {
 

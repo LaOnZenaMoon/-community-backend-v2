@@ -1,8 +1,8 @@
 package me.lozm.global.exception;
 
 import lombok.extern.slf4j.Slf4j;
-import me.lozm.utils.exception.CustomExceptionType;
-import me.lozm.utils.exception.DateUtils;
+import me.lozm.exception.CustomExceptionType;
+import me.lozm.utils.DateUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;

@@ -2,11 +2,11 @@ package me.lozm.app.board.controller;
 
 import com.github.javafaker.Faker;
 import me.lozm.app.board.service.BoardService;
+import me.lozm.domain.board.code.BoardType;
+import me.lozm.domain.board.code.ContentType;
 import me.lozm.domain.board.entity.Board;
 import me.lozm.domain.board.service.BoardHelperService;
 import me.lozm.domain.board.vo.BoardDetailVo;
-import me.lozm.global.code.BoardType;
-import me.lozm.global.code.ContentType;
 import me.lozm.global.code.HierarchyType;
 import me.lozm.global.documentation.BaseDocumentationTest;
 import me.lozm.global.documentation.DocumentationUtils;

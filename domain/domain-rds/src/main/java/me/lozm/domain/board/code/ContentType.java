@@ -1,7 +1,7 @@
-package me.lozm.global.code;
+package me.lozm.domain.board.code;
 
 import lombok.Getter;
-import me.lozm.utils.code.EnumModel;
+import me.lozm.code.EnumModel;
 
 import java.util.Arrays;
 

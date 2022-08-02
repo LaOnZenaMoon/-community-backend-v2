@@ -3,8 +3,8 @@ package me.lozm.domain.board.dto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.lozm.global.code.BoardType;
-import me.lozm.global.code.ContentType;
+import me.lozm.domain.board.code.BoardType;
+import me.lozm.domain.board.code.ContentType;
 import me.lozm.global.code.HierarchyType;
 import me.lozm.global.model.HierarchyRequestAble;
 

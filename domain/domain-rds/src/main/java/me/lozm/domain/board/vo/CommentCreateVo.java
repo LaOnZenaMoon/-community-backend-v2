@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.lozm.global.code.CommentType;
+import me.lozm.domain.board.code.CommentType;
 import me.lozm.global.code.HierarchyType;
 import me.lozm.global.model.HierarchyRequestAble;
 import org.springframework.util.Assert;
