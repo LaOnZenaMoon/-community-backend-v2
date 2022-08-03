@@ -25,7 +25,8 @@ public class FileUploadDto {
     @AllArgsConstructor
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class Response {
-        private final Long fileId;
+        private final String fileId;
+        private final String fileName;
         private final FileUploadType uploadType;
         private final Long targetId;
     }

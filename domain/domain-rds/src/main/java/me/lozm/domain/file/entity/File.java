@@ -22,13 +22,17 @@ import javax.persistence.*;
 @Where(clause = "IS_USE = true")
 @DynamicUpdate
 @DynamicInsert
-@SequenceGenerator(name = "FILE_SEQ_GEN", sequenceName = "FILE_SEQ")
 public class File extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FILE_SEQ_GEN")
     @Column(name = "FILE_ID")
-    private Long id;
+    private String id;
+
+    @Column(name = "FILE_NAME")
+    private String fileName;
+
+    @Column(name = "FILE_EXTENSION")
+    private String fileExtension;
 
     @Column(name = "UPLOAD_TYPE")
     @Convert(converter = FileUploadTypeConverter.class)
@@ -37,9 +41,12 @@ public class File extends BaseEntity {
     @Column(name = "TARGET_ID")
     private Long targetId;
 
-    public static File of(FileUploadType uploadType, Long targetId) {
+    public static File of(String randomFileName, String originalFileName, String fileExtension, FileUploadType uploadType, Long targetId) {
         File file = new File();
         file.isUse = true;
+        file.id = randomFileName;
+        file.fileName = originalFileName;
+        file.fileExtension = fileExtension;
         file.uploadType = uploadType;
         file.targetId = targetId;
         return file;
