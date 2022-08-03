@@ -7,13 +7,11 @@ import me.lozm.domain.file.dto.FileUploadDto;
 import me.lozm.domain.file.mapper.FileMapper;
 import me.lozm.domain.file.vo.FileUploadVo;
 import me.lozm.global.model.CommonResponseDto;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
@@ -35,6 +33,12 @@ public class FileController {
         FileUploadVo.Response responseVo = fileService.uploadFile(requestVo);
         FileUploadDto.Response responseDto = fileMapper.toUploadDto(responseVo);
         return CommonResponseDto.created(responseDto);
+    }
+
+    @GetMapping("{fileId}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable("fileId") String fileId) {
+        Resource downloadResource = fileService.downloadFile(fileId);
+        return CommonResponseDto.downloadOk(downloadResource);
     }
 
 }

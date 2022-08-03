@@ -15,16 +15,17 @@ public class FileHelperService {
 
     private final FileRepository fileRepository;
 
-    public Optional<File> findFile(Long fileId) {
+
+    public Optional<File> findFile(String fileId) {
         return fileRepository.findById(fileId);
     }
 
-    public File getFile(Long fileId) {
+    public File getFile(String fileId) {
         return findFile(fileId).orElseThrow(() -> new IllegalArgumentException(getNotFoundFormat(fileId)));
     }
 
-    private String getNotFoundFormat(Long fileId) {
-        return format("존재하지 않는 파일입니다. 파일 ID: %d", fileId);
+    private String getNotFoundFormat(String fileId) {
+        return format("존재하지 않는 파일입니다. 파일 ID: %s", fileId);
     }
 
 }

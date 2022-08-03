@@ -7,12 +7,15 @@ import me.lozm.domain.board.service.CommentHelperService;
 import me.lozm.domain.file.code.FileUploadType;
 import me.lozm.domain.file.entity.File;
 import me.lozm.domain.file.repository.FileRepository;
+import me.lozm.domain.file.service.FileHelperService;
 import me.lozm.domain.file.vo.FileUploadVo;
 import me.lozm.exception.BadRequestException;
 import me.lozm.exception.CustomExceptionType;
 import me.lozm.exception.InternalServerException;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +24,7 @@ import java.io.InputStream;
 import java.nio.file.*;
 import java.util.UUID;
 
+import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Slf4j
@@ -32,6 +36,7 @@ public class FileServiceImpl implements FileService {
     private final BoardHelperService boardHelperService;
     private final CommentHelperService commentHelperService;
     private final FileRepository fileRepository;
+    private final FileHelperService fileHelperService;
     private final Environment environment;
 
 
@@ -64,6 +69,23 @@ public class FileServiceImpl implements FileService {
                 .uploadType(uploadType)
                 .targetId(targetId)
                 .build();
+    }
+
+    @Override
+    public Resource downloadFile(String fileId) {
+        File file = fileHelperService.getFile(fileId);
+        java.io.File downloadedFile = downloadFileFromServer(file.getId() + FilenameUtils.EXTENSION_SEPARATOR + file.getFileExtension());
+        return new FileSystemResource(downloadedFile);
+    }
+
+    private java.io.File downloadFileFromServer(String downloadFileName) throws IllegalArgumentException {
+        final String filePath = environment.getProperty("file.upload-path") + java.io.File.separator + downloadFileName;
+        java.io.File file = new java.io.File(filePath);
+        if (file.exists()) {
+            return file;
+        }
+
+        throw new IllegalArgumentException(format("다운로드할 파일이 존재하지 않습니다. 파일명: %s", downloadFileName));
     }
 
     @Override
