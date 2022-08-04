@@ -21,6 +21,9 @@ public enum CustomExceptionType {
 
     // Boards and comments
     INVALID_HIERARCHY_TYPE("HIERARCHY_001", "계층 유형이 잘못되었습니다."),
+
+    // Files
+    INTERNAL_SERVER_ERROR_FILES("SERVER_002", "요청을 처리하는 중에 오류가 있습니다."),
     ;
 
     private final String code;

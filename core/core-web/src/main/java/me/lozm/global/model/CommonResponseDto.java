@@ -5,7 +5,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import me.lozm.exception.CustomExceptionType;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
@@ -50,6 +53,10 @@ public class CommonResponseDto<T> {
                 .data(object)
                 .build();
         return getOkResponseEntity(responseDto);
+    }
+
+    public static ResponseEntity<Resource> downloadOk(Resource downloadResource) {
+        return getDownloadOkResponseEntity(downloadResource);
     }
 
     public static <T> ResponseEntity<CommonResponseDto<T>> created() {
@@ -119,6 +126,13 @@ public class CommonResponseDto<T> {
 
     private static <T> ResponseEntity<CommonResponseDto<T>> getOkResponseEntity(CommonResponseDto<T> responseDto) {
         return ResponseEntity.ok(responseDto);
+    }
+
+    private static ResponseEntity<Resource> getDownloadOkResponseEntity(Resource downloadResource) {
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + downloadResource.getFilename() + "\"")
+                .body(downloadResource);
     }
 
     private static <T> ResponseEntity<CommonResponseDto<T>> getCreatedResponseEntity(CommonResponseDto<T> responseDto) {
