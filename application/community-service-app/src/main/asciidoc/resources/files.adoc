@@ -1,0 +1,29 @@
+=== Boards
+
+==== *[POST]* /files
+파일 업로드
+
+===== Request Structure
+|===
+|Part|Description
+
+|requestDto| 파일 업로드 관련 부가 정보
+|uploadFile| 업로드할 파일
+|===
+
+===== Request DTO
+|===
+|Field|Type|Optional|Description
+
+|uploadType|String|false|파일 업로드 유형
+|targetId|Number|false|업로드할 대상 ID
+|===
+
+===== Request Sample
+include::{snippets}/upload-file_success/curl-request.adoc[]
+
+===== Response Body Fields
+include::{snippets}/upload-file_success/response-fields.adoc[]
+
+===== Response Sample
+include::{snippets}/upload-file_success/http-response.adoc[]

@@ -33,3 +33,5 @@
 include::{adocResourcesDir}/boards.adoc[]
 
 include::{adocResourcesDir}/comments.adoc[]
+
+include::{adocResourcesDir}/files.adoc[]
