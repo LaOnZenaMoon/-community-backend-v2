@@ -1,10 +1,13 @@
 package me.lozm.app.file.controller;
 
 import me.lozm.app.board.service.BoardService;
+import me.lozm.app.file.service.FileService;
 import me.lozm.domain.board.code.BoardType;
 import me.lozm.domain.board.code.ContentType;
 import me.lozm.domain.board.vo.BoardDetailVo;
 import me.lozm.domain.file.code.FileUploadType;
+import me.lozm.domain.file.repository.FileRepository;
+import me.lozm.domain.file.vo.FileUploadVo;
 import me.lozm.global.documentation.BaseDocumentationTest;
 import me.lozm.global.documentation.DocumentationUtils;
 import org.junit.jupiter.api.AfterAll;
@@ -21,15 +24,27 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Optional;
 
 import static me.lozm.app.board.TestUtils.createBoard;
 import static me.lozm.global.documentation.DocumentationUtils.PREFIX_DATA;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class FileControllerTest extends BaseDocumentationTest {
+
+    @Autowired
+    private FileService fileService;
+
+    @Autowired
+    private FileRepository fileRepository;
+
 
     private static BoardDetailVo.Response boardDetailVo;
 
@@ -56,11 +71,7 @@ class FileControllerTest extends BaseDocumentationTest {
         MockMultipartFile requestDto = new MockMultipartFile(
                 "requestDto", "", MediaType.APPLICATION_JSON_VALUE, requestBody.getBytes());
 
-        ClassPathResource classPathResource = new ClassPathResource("files/sample.jpg");
-        File uploadFile = classPathResource.getFile();
-        FileInputStream fileInputStream = new FileInputStream(uploadFile);
-        MockMultipartFile uploadMultipartFile = new MockMultipartFile(
-                "uploadFile", uploadFile.getName(), MediaType.IMAGE_JPEG_VALUE, fileInputStream);
+        MockMultipartFile uploadMultipartFile = getSampleMockMultipartFile();
 
         // When
         ResultActions resultActions = mockMvc.perform(
@@ -82,6 +93,39 @@ class FileControllerTest extends BaseDocumentationTest {
                                         subsectionWithPath("targetId").type(JsonFieldType.NUMBER).description("업로드할 대상 ID")
                                 )
                 ));
+
+        Optional<me.lozm.domain.file.entity.File> fileOptional = fileRepository.findByTargetId(boardDetailVo.getBoardId());
+        assertTrue(fileOptional.isPresent());
+    }
+
+    @DisplayName("파일 다운로드 성공")
+    @Test
+    void downloadFile_success() throws Exception {
+        // Given
+        MockMultipartFile sampleMockMultipartFile = getSampleMockMultipartFile();
+
+        // When
+        FileUploadVo.Response fileUploadResponseVo = fileService.uploadFile(
+                new FileUploadVo.Request(sampleMockMultipartFile, FileUploadType.BOARD, boardDetailVo.getBoardId()));
+
+        ResultActions resultActions = mockMvc.perform(
+                RestDocumentationRequestBuilders.get("/files/{fileId}", fileUploadResponseVo.getFileId())
+        );
+
+        // Then
+        resultActions.andDo(print())
+                .andDo(this.documentationHandler.document(
+                        pathParameters(parameterWithName("fileId").description("파일 ID"))
+                ));
+    }
+
+    private MockMultipartFile getSampleMockMultipartFile() throws IOException {
+        ClassPathResource classPathResource = new ClassPathResource("files/sample.jpg");
+        File uploadFile = classPathResource.getFile();
+        FileInputStream fileInputStream = new FileInputStream(uploadFile);
+        MockMultipartFile uploadMultipartFile = new MockMultipartFile(
+                "uploadFile", uploadFile.getName(), MediaType.IMAGE_JPEG_VALUE, fileInputStream);
+        return uploadMultipartFile;
     }
 
 }

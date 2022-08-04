@@ -1,4 +1,4 @@
-=== Boards
+=== Files
 
 ==== *[POST]* /files
 파일 업로드
@@ -27,3 +27,22 @@ include::{snippets}/upload-file_success/response-fields.adoc[]
 
 ===== Response Sample
 include::{snippets}/upload-file_success/http-response.adoc[]
+
+
+
+==== *[GET]* /files
+파일 다운로드
+
+===== Request Path Parameters
+include::{snippets}/download-file_success/path-parameters.adoc[]
+
+===== Request Sample
+include::{snippets}/download-file_success/http-request.adoc[]
+
+===== Response Sample
+----
+HTTP/1.1 200 OK
+Content-Type: application/octet-stream;charset=UTF-8
+Content-Disposition: attachment; filename="2a63fad5-dc1a-4c64-8905-ce786f702de9.jpg"
+Accept-Ranges: bytes
+----
